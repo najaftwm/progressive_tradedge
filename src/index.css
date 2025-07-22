@@ -1,0 +1,440 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* adding custom font to the body */
+body {
+  font-family: 'Roboto', 'Inter', sans-serif;
+  background-color: #f7f7f7;
+}
+
+*::-webkit-scrollbar{
+  width: 2px;
+  background: #f7f7f7;
+  border-radius: 12px;
+}
+
+.tableContainer::-webkit-scrollbar{
+ width: 5px;
+ height: 4px;
+ background: #f7f7f7;
+ border-radius: 12px;
+}
+
+.ladderFilter::-webkit-scrollbar{
+  width: 2px;
+  background: #f7f7f7;
+  border-radius: 12px;
+}
+
+.customMultiSelect::-webkit-scrollbar{
+  width: 4px;
+  background: #f7f7f7;
+}
+
+.tableContainer::-webkit-scrollbar-thumb{
+  width: 5px;
+  background: #a5a4a4;
+  border-radius: 12px;
+ }
+
+.customMultiSelect::-webkit-scrollbar-thumb{
+  width: 4px;
+  height: 4px;
+  background: #504e4e;
+  border-radius: 12px;
+
+}
+
+.filterContainer::-webkit-scrollbar{
+  width: 2px;
+  background: #f7f7f7;
+  border-radius: 12px;
+}
+
+.invoiceContainer::-webkit-scrollbar{
+  width: 2px;
+  background: #f7f7f7;
+  border-radius: 12px;
+
+}
+
+.followupContainer::-webkit-scrollbar{
+  width: 2px;
+  background: #f7f7f7;
+  border-radius: 12px;
+}
+
+.highlighted-row {
+  background-color: #dde9f3; /* Light blue background color */
+  transition: background-color 1s ease;
+  overflow-y: scroll; 
+}
+
+
+/* changing the accent color of checbox & radio */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #9a55ff;
+}
+
+/* removing the spin buttons from input type number */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"] {
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: textfield !important;
+}
+
+
+
+/* tootliptext styling */
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 90%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+.square-box {
+  border-radius: 10px; /* Adjust the border-radius as needed */
+  transition: border-radius 0.3s ease; /* Add transition effect */
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.square-box:hover {
+  border-radius: 20px; /* Adjust the border-radius for the hover effect */
+}
+
+
+/* Custom Calender Styling */
+.custom-daterange > div > div {
+  position: fixed;
+  bottom: 0;
+}
+.custom-daterange > div > div > div.absolute.z-20.h-4.w-4.rotate-45 {
+  display: none;
+}
+
+.bg-blue-100 {
+  background-color: #eadcff;
+}
+.bg-blue-500 {
+  background-color: #9a55ff;
+}
+.text-blue-600,
+.text-blue-500 {
+  color: #9a55ff;
+}
+
+/* ---------- Budget (Price Range Styling) Starts ---------- */
+.thumb {
+  top: -6px;
+  border-radius: 50%;
+  background: #9a55ff;
+  width: 15px;
+  cursor: pointer;
+  height: 15px;
+
+  font-size: 0;
+  outline: none;
+}
+.track-0 {
+  background-color: #e0e0e0;
+  height: 2px;
+}
+.track-2 {
+  height: 2px;
+  background-color: #e0e0e0;
+}
+
+.track-1 {
+  height: 2px;
+  background: #d2b2ff;
+}
+
+/* ---------- Budget (Price Range Styling) Ends ---------- */
+
+/* Styling for custom datetime */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  /* opacity: 0; */
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+
+/* input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+} */
+
+
+.filter-panel {
+  position: absolute;
+  width: 250px;
+  height: 520px;
+  right: -100%; /* Initially hide the panel */
+  transition: right 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+      right: -100%;
+  }
+  to {
+      right: -14%;
+  }
+}
+
+@keyframes slideOut {
+  from {
+      right: -14%;
+  }
+  to {
+      right: -100%;
+  }
+}
+
+.filter-panel.slide-in {
+  animation: slideIn 0.5s forwards;
+  right: -14%; /* Ensure it's set to the final position */
+
+}
+
+.filter-panel.slide-out {
+  animation: slideOut 0.5s forwards;
+  right: -100%; /* Ensure it's set to the final position */
+
+}
+  
+
+.dropdown {
+  position: relative;
+  color: #333;
+  cursor: text;
+}
+
+
+
+.dropdown .selected-value input {
+  line-height: 1.5;
+  font-size: 1rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 15px; 
+  box-sizing: border-box;
+  cursor: text;
+  padding: 8px 52px 8px 10px; 
+  transition: all 200ms ease;
+  width: 100%;
+  padding-left: 29px;
+  outline: none; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown .selected-value input:focus {
+  outline: 0.5px solid #9a55ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+
+.dropdown .options {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 0 rgba(220, 16, 16, 0.06);
+  box-sizing: border-box;
+  margin-top: -1px;
+  max-height: 200px;
+  overflow-y: scroll;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 1000;
+  /* -webkit-overflow-scrolling: touch; */
+}
+
+.dropdown .options:focus {
+  outline: 0.5px solid #9a55ff; 
+}
+
+.dropdown .options::-webkit-scrollbar{
+  width: 4px;
+  height: 12px;
+  background: transparent;
+  border-radius: 12px;
+}
+
+.dropdown .options::-webkit-scrollbar-thumb{
+  width: 2px;
+  height: 2px;
+  background: #a2a0a0;
+  border-radius: 12px;
+  padding-top: 4px;
+  border-top-right-radius: 15px;
+}
+
+.dropdown .options.open {
+  display: block;
+}
+
+.dropdown .option {
+  box-sizing: border-box;
+  color: rgba(51, 51, 51, 0.8);
+  cursor: pointer;
+  display: block;
+  padding: 8px 10px;
+}
+
+.dropdown .option.selected,
+.dropdown .option:hover {
+  background-color: #f2f9fc;
+  color: #333;
+}
+
+
+/* {loader annimation} */
+.loader {
+  transform: rotateZ(45deg);
+  perspective: 1000px;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  color: #fff;
+}
+  .loader:before,
+  .loader:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    border-radius: 50%;
+    transform: rotateX(70deg);
+    animation: 1s spin linear infinite;
+  }
+  .loader:after {
+    color: #0052CC;
+    transform: rotateY(70deg);
+    animation-delay: .4s;
+  }
+
+@keyframes rotate {
+  0% {
+    transform: translate(-50%, -50%) rotateZ(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateZ(360deg);
+  }
+}
+
+@keyframes rotateccw {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+@keyframes spin {
+  0%,
+  100% {
+    box-shadow: .2em 0px 0 0px currentcolor;
+  }
+  12% {
+    box-shadow: .2em .2em 0 0 currentcolor;
+  }
+  25% {
+    box-shadow: 0 .2em 0 0px currentcolor;
+  }
+  37% {
+    box-shadow: -.2em .2em 0 0 currentcolor;
+  }
+  50% {
+    box-shadow: -.2em 0 0 0 currentcolor;
+  }
+  62% {
+    box-shadow: -.2em -.2em 0 0 currentcolor;
+  }
+  75% {
+    box-shadow: 0px -.2em 0 0 currentcolor;
+  }
+  87% {
+    box-shadow: .2em -.2em 0 0 currentcolor;
+  }
+}
+
+
+
+/* target vs acv table code  */
+
+
+
+.custom-table {
+  overflow-x: auto; /* Enable horizontal scrolling */
+  max-width: 100%; /* Set max width for responsiveness */
+}
+
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.data-table th, .data-table td {
+  border: 1px solid #ccc; /* Border for the table cells */
+  padding: 8px;
+  text-align: left; /* Align text to the right */
+}
+
+.data-table th {
+  background-color: #f2f2f2; /* Header background color */
+}
+
+.data-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Alternate row color */
+}
+
+.data-table th:first-child, .data-table td:first-child {
+  position: sticky; /* Make the first column sticky */
+  left: 0; /* Position it on the left */
+  background: #fff; /* Background for the sticky column */
+  z-index: 20; /* Stack order */
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1)
+}
+
+.data-table th:last-child, .data-table td:last-child {
+  position: sticky; /* Make the last column sticky */
+  right: 0; /* Position it on the right */
+  background: #fff; /* Background for the sticky column */
+  z-index: 20; /* Stack order */
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1)
+}

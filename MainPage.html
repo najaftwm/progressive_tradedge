@@ -1,0 +1,2972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TWM Research Alert</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MQC6G39B');</script>
+    <!-- End Google Tag Manager -->
+
+    <style>
+
+.form-container {
+      max-width: 24rem;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+    }
+    .form-header {
+      background: linear-gradient(to right, #3B82F6, #1D4ED8);
+      color: #ffffff;
+      text-align: center;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"], select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      background: #f9fafb;
+      font-size: 0.875rem;
+      color: #1f2937;
+      transition: all 0.2s ease;
+    }
+    input:focus {
+      outline: none;
+      border-color: #3B82F6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    input::placeholder {
+      color: #9ca3af;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    .select2-container {
+      width: 100% !important;
+    }
+    .select2-container--default .select2-selection--single {
+      min-height: 42px;
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .select2-container--default .select2-selection--single:hover,
+    .select2-container--default .select2-selection--single:focus-within {
+      border-color: #3B82F6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: #1f2937;
+      line-height: 42px;
+      padding-left: 1rem;
+      font-size: 0.875rem;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+      color: #9ca3af;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 42px;
+      right: 10px;
+    }
+    .error-message {
+      color: #ef4444;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      margin-left: 0.25rem;
+      opacity: 0;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      background: #f9fafb;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+    }
+    .checkbox-group input {
+      width: 1rem;
+      height: 1rem;
+      accent-color: #3B82F6;
+    }
+    .checkbox-group label {
+      margin-left: 0.5rem;
+      font-size: 0.875rem;
+      color: #4b5563;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(to right, #3B82F6, #1D4ED8);
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .submit-btn:hover:not(:disabled) {
+      background: linear-gradient(to right, #2563eb, #1e40af);
+      transform: translateY(-1px);
+    }
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    @media (max-width: 640px) {
+      .form-container {
+        padding: 1.5rem;
+      }
+      .form-header {
+        font-size: 1.125rem;
+        padding: 1rem;
+      }
+      input[type="text"],
+      input[type="number"],
+      input[type="email"] {
+        font-size: 0.8125rem;
+        padding: 0.625rem 0.875rem;
+      }
+      .submit-btn {
+        font-size: 0.8125rem;
+        padding: 0.625rem;
+      }
+    }
+
+        *{
+            scroll-behavior: smooth;
+        }
+
+        body {
+           margin: 0px !important;
+           padding: 0px !important;
+           scroll-behavior: smooth !important;
+           overflow-x: hidden !important;
+        }
+
+        .enquire-now {
+            position: fixed;
+            display: block;
+            align-content: center;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: 99;
+        }
+
+        .enquire-now button{
+            position: relative;
+            padding: 20px;
+            margin: 0px;
+            left: 0px;
+            z-index: 999;
+            color: white;
+            left: -30px;
+            font-weight: 600;
+            background-color: blue;
+            transform: rotate(90deg);
+            border-radius: 10px 10px 0px 0px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 1800px;
+            margin: 0 auto;
+         
+        }
+        @media (min-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        .hero-form, .service-card, .still-not-sure-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .whatsapp-icon {
+            width: 20px;
+            height: 20px;
+            margin-left: 8px;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #2563eb;
+        }
+        body {
+            padding-top: 6rem; /* Adjusted for strip (2rem) and navbar (4rem) height */
+        }
+        .testimonial-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .check-icon {
+            color: #10B981; /* Green checkmark */
+            font-size: 1.5rem;
+        }
+        .section-transition {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+        .footer-link {
+            transition: color 0.3s ease;
+        }
+        .footer-link:hover {
+            color: #60a5fa;
+        }
+
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            width: 90%; /* Default width for smaller screens */
+            max-width: 400px; /* Limit the maximum width */
+        }
+        .popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        /* Second popup styles */
+        .second-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            width: 90%; /* Default width for smaller screens */
+            max-width: 400px; /* Limit the maximum width */
+        }
+        .second-popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .second-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        /* WhatsApp floating button styles */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366; /* WhatsApp green */
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+        .whatsapp-float img {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* WhatsApp popup form styles */
+        .whatsapp-form {
+            position: fixed;
+            bottom: 90px; /* Align just above the WhatsApp button */
+            right: 20px; /* Align with the WhatsApp button */
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            width: 90%; /* Default width for smaller screens */
+            max-width: 300px; /* Limit the maximum width */
+        }
+        .whatsapp-form h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .whatsapp-form p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        .whatsapp-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+        .whatsapp-form button {
+            width: 100%;
+            background: #007BFF; /* Default blue button */
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .whatsapp-form button:hover {
+            background: #0056b3; /* Darker blue on hover */
+        }
+        .whatsapp-form .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Add 15% padding on the x-axis to all sections */
+        section {
+            padding: 5%;
+            padding-left: 15%;
+            padding-right: 15%;
+        }
+
+        /* For mobile view, change padding to 5% */
+        @media (max-width: 768px) {
+            section {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+        }
+
+        /* Popup styles for section buttons */
+        .section-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+        .section-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            display: none;
+            width: 90%;
+            max-width: 400px;
+        }
+        .section-popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .whatsapp-float .form-container > div {
+            margin: 0px !important;
+            box-shadow: none !important;
+            padding: 0px !important;
+        }
+       
+        /* Popup responsive styles */
+        .popup, .second-popup {
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .popup, .second-popup {
+                width: 95%;
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+
+            .popup h2, .second-popup h2 {
+                font-size: 1.25rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .popup p, .second-popup p {
+                font-size: 0.875rem;
+                margin-bottom: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 0.875rem;
+                padding: 0.625rem;
+            }
+
+            .select2-container--default .select2-selection--single {
+                min-height: 38px;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                line-height: 38px;
+                font-size: 0.875rem;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 38px;
+            }
+
+            .checkbox-group {
+                padding: 0.5rem;
+            }
+
+            .checkbox-group label {
+                font-size: 0.75rem;
+            }
+
+            .submit-btn {
+                padding: 0.625rem;
+                font-size: 0.875rem;
+            }
+
+            .error-message {
+                font-size: 0.75rem;
+            }
+
+            /* Ensure popup is centered on mobile */
+            .popup-overlay, .second-popup-overlay {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Adjust close button position */
+            .popup .close-btn, .second-popup .close-btn {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Ensure Select2 dropdowns are properly sized on mobile */
+        @media (max-width: 640px) {
+            .select2-container--open .select2-dropdown {
+                width: 100% !important;
+                min-width: 200px;
+            }
+
+            .select2-container--default .select2-results__option {
+                font-size: 0.875rem;
+                padding: 0.5rem;
+            }
+        }
+
+        /* Prevent body scroll when popup is open */
+        body.popup-open {
+            overflow: hidden;
+        }
+
+        /* Form styles for all forms */
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-container {
+                padding: 1rem;
+                margin: 0.5rem auto;
+            }
+
+            .hero-form {
+                margin: 0;
+                padding: 1rem;
+            }
+
+            .hero-grid {
+                padding: 1rem;
+            }
+        }
+
+        /* Ensure consistent form styling across all forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background: #f9fafb;
+            font-size: 0.875rem;
+            color: #1f2937;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            margin-left: 0.25rem;
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            background: #f9fafb;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(to right, #3B82F6, #1D4ED8);
+            color: #ffffff;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: linear-gradient(to right, #2563eb, #1e40af);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Hero form specific styles */
+        .hero-form {
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .hero-form .form-container {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .hero-form .form-container {
+                margin: 1rem auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans"></body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MQC6G39B"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+    <div class="enquire-now">
+        <button onclick="showEnquireFormPopup();">Enquire now</button>
+    </div>
+
+    <!-- Enquire Now Form Popup -->
+    <div class="popup-overlay" id="enquire-popup-overlay" style="display: none;"></div>
+    <div class="popup" id="enquire-popup" style="display: none;">
+        <button class="close-btn" id="close-enquire-popup">&times;</button>
+        <h2 class="text-xl font-bold mb-4">Enquire Now</h2>
+        <form class="space-y-4" id="enquire-form">
+            <div class="form-container" style="margin: 0px !important; box-shadow: none; padding: 0px;">
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <input
+                            type="text"
+                            id="enquire-fullName"
+                            placeholder="Full Name"
+                            required
+                        />
+                        <div id="enquire-fullNameError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="number"
+                            id="enquire-phone"
+                            placeholder="Phone"
+                            required
+                        />
+                        <div id="enquire-phoneError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="email"
+                            id="enquire-email"
+                            placeholder="Email Address"
+                            required
+                        />
+                        <div id="enquire-emailError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="enquire-segment" class="w-full" required>
+                            <option value="" disabled selected>Select Segment</option>
+                        </select>
+                        <div id="enquire-segmentError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="enquire-language" class="w-full" required>
+                            <option value="" disabled selected>Select Language</option>
+                        </select>
+                        <div id="enquire-languageError" class="error-message"></div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input
+                            type="checkbox"
+                            id="enquire-consent"
+                            checked
+                        />
+                        <label for="enquire-consent">
+                            I agree to the terms and conditions
+                        </label>
+                        <div id="enquire-consentError" class="error-message"></div>
+                    </div>
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Top Strip -->
+    <div class="bg-blue-600 text-sm text-white py-2 fixed w-full top-0 z-40">
+        <div class="container mx-auto px-4 text-center">
+            <p>Note: Investment in securities market are subject to market risks, read all documents carefully before investing.</p>
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup-overlay" id="popup-overlay" style="display: none;"></div>
+    <div class="popup" id="popup" style="display: none;">
+        <button class="close-btn" id="close-popup">&times;</button>
+        <h2 class="text-xl font-bold mb-4" id="popup-heading">Special Offer!</h2>
+        <p class="text-gray-700 mb-4" id="popup-desc">Sign up now and start maximizing profits with our premium stock advisory services!</p>
+        <form class="space-y-4" id="main-popup-form">
+            <input type="hidden" id="popup-source" name="popup-source" value="" />
+            <div class="form-container" style="margin: 0px !important; box-shadow: none; padding: 0px;">
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <input type="text" id="popup-fullName" placeholder="Full Name" required />
+                        <div id="popup-fullNameError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="popup-phone" placeholder="Phone" required />
+                        <div id="popup-phoneError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="popup-email" placeholder="Email Address" required />
+                        <div id="popup-emailError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="popup-state" class="w-full" required>
+                            <option value="" disabled selected>Select State</option>
+                        </select>
+                        <div id="popup-stateError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="popup-segment" class="w-full" required>
+                            <option value="" disabled selected>Select Segment</option>
+                        </select>
+                        <div id="popup-segmentError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="popup-investment" class="w-full" required>
+                            <option value="" disabled selected>Select Investment Amount</option>
+                        </select>
+                        <div id="popup-investmentError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="popup-language" class="w-full" required>
+                            <option value="" disabled selected>Select Language</option>
+                        </select>
+                        <div id="popup-languageError" class="error-message"></div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="popup-consent" checked />
+                        <label for="popup-consent">I agree to the terms and conditions</label>
+                        <div id="popup-consentError" class="error-message"></div>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Second Popup -->
+    <div class="second-popup-overlay" id="second-popup-overlay"></div>
+    <div class="second-popup" id="second-popup">
+        <button class="close-btn" id="close-second-popup">&times;</button>
+        <h2 class="text-xl font-bold mb-4">Congratulations!</h2>
+        <p class="text-gray-700 mb-4">You have unlocked 10K Trade Gurantee Package! Fill out the form below to claim them.</p>
+        <form class="space-y-4">
+            <div id="form-container" class="form-container" style="margin: 0px !important; box-shadow: none; padding: 0px;">
+                <div class="space-y-4">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      id="fullName"
+                      placeholder="Full Name"
+                      required
+                    />
+                    <div id="fullNameError" class="error-message"></div>
+                  </div>
+           
+                  <div class="form-group">
+                    <input
+                      type="number"
+                      id="phone"
+                      placeholder="Phone"
+                      required
+                    />
+                    <div id="phoneError" class="error-message"></div>
+                  </div>
+           
+                  <div class="form-group">
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="Email Address"
+                      required
+                    />
+                    <div id="emailError" class="error-message"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <select id="state" class="w-full" required>
+                      <option value="" disabled selected>Select State</option>
+                    </select>
+                    <div id="stateError" class="error-message"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <select id="segment" class="w-full" required>
+                      <option value="" disabled selected>Select Segment</option>
+                    </select>
+                    <div id="segmentError" class="error-message"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <select id="investment" class="w-full" required>
+                      <option value="" disabled selected>Select Investment Amount</option>
+                    </select>
+                    <div id="investmentError" class="error-message"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <select id="language" class="w-full" required>
+                      <option value="" disabled selected>Select Language</option>
+                    </select>
+                    <div id="languageError" class="error-message"></div>
+                  </div>
+           
+                  <div class="checkbox-group">
+                    <input
+                      type="checkbox"
+                      id="consent"
+                      checked
+                    />
+                    <label for="consent">
+                      I agree to the terms and conditions
+                    </label>
+                    <div id="consentError" class="error-message"></div>
+                  </div>
+           
+                  <button
+                    id="submitBtn"
+                    class="submit-btn"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+        </form>
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <div class="whatsapp-float" id="whatsapp-button" aria-label="Chat with us on WhatsApp">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
+    </div>
+
+    <!-- WhatsApp Popup Form -->
+    <div class="whatsapp-form" id="whatsapp-form">
+        <button style="position: absolute !important; right: 0px; top: 0px; width: 50px !important; background-color: white !important; color: black;" id="close-whatsapp-form">&times;</button>
+        <h2>Get a Message On WhatsApp</h2>
+        <p>Fill out the form, and our experts will send you "HELLO" on your WhatsApp.</p>
+        <form>
+            <div id="form-container" class="form-container" style="margin: 0px !important; box-shadow: none; padding: 0px;">
+           
+                <div class="space-y-4">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      id="fullName"
+                      placeholder="Full Name"
+                      required
+                    />
+                    <div id="fullNameError" class="error-message"></div>
+                  </div>
+           
+                  <div class="form-group">
+                    <input
+                      type="number"
+                      id="phone"
+                      placeholder="Phone"
+                      required
+                    />
+                    <div id="phoneError" class="error-message"></div>
+                  </div>
+           
+                  <button
+                    id="submitBtn"
+                    class="submit-btn"
+                    style="background-color: rgb(5, 160, 5); color: white;"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+        </form>
+    </div>
+
+    <!-- Section Popup Form -->
+    <div class="section-popup-overlay" id="section-popup-overlay"></div>
+    <div class="section-popup" id="section-popup">
+        <button class="close-btn" id="close-section-popup">&times;</button>
+        <h2 class="text-xl font-bold mb-4" id="section-popup-heading">Enquire Now</h2>
+        <form class="space-y-4" id="section-form">
+            <div class="form-container" style="margin: 0px !important; box-shadow: none; padding: 0px;">
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <input
+                            type="text"
+                            id="section-fullName"
+                            placeholder="Full Name"
+                            required
+                        />
+                        <div id="section-fullNameError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="number"
+                            id="section-phone"
+                            placeholder="Phone"
+                            required
+                        />
+                        <div id="section-phoneError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="email"
+                            id="section-email"
+                            placeholder="Email Address"
+                            required
+                        />
+                        <div id="section-emailError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="section-segment" class="w-full" required>
+                            <option value="" disabled selected>Select Segment</option>
+                        </select>
+                        <div id="section-segmentError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <select id="section-language" class="w-full" required>
+                            <option value="" disabled selected>Select Language</option>
+                        </select>
+                        <div id="section-languageError" class="error-message"></div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input
+                            type="checkbox"
+                            id="section-consent"
+                            checked
+                        />
+                        <label for="section-consent">
+                            I agree to the terms and conditions
+                        </label>
+                        <div id="section-consentError" class="error-message"></div>
+                    </div>
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center bg-white relative">
+        <div style="background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://images.pexels.com/photos/6781008/pexels-photo-6781008.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2); position: absolute; height: 100%; width: 100%; background-size: cover; background-position: center; z-index: 1;"></div>
+        <div class="hero-grid max-w-6xl mx-auto px-6 md:px-12 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="text-center md:text-left text-white" style="padding-top: 50px;">
+                <p class="text-sm text-green-400 mb-4 font-semibold">
+                    <span class="text-green-500 font-bold">&#10003;</span> SEBI REGISTRATION NUMBER: INH00018081
+                </p>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                    Your Trusted <span class="text-blue-400">Stock Advisory</span> Firm
+                </h1>
+                <p class="text-lg md:text-xl font-medium mb-8">
+                    We provide stock recommendations at the right time with 90% accuracy, powered by SEBI Registered Research Analysts!
+                </p>
+                <button onclick="document.getElementById('services').scrollIntoView({ behavior: 'smooth' });" class="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">
+                    View Our Package
+                </button>
+            </div>
+            <form class="space-y-4" id="hero-form">
+                <div class="form-container hero-form bg-white text-gray-900 p-8 rounded-lg shadow-lg" style="width: 100%; max-width: 400px; margin: 0 auto;">
+                    <div class="form-header">
+                        Book Your Free Spot & <br /> Start Trading With Us
+                    </div>
+                    <div class="space-y-4">
+                        <div class="form-group">
+                            <input
+                                type="text"
+                                id="hero-fullName"
+                                placeholder="Full Name"
+                                required
+                            />
+                            <div id="hero-fullNameError" class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="number"
+                                id="hero-phone"
+                                placeholder="Phone"
+                                required
+                            />
+                            <div id="hero-phoneError" class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="email"
+                                id="hero-email"
+                                placeholder="Email Address"
+                                required
+                            />
+                            <div id="hero-emailError" class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <select id="hero-state" class="w-full" required>
+                                <option value="" disabled selected>Select State</option>
+                            </select>
+                            <div id="hero-stateError" class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <select id="hero-segment" class="w-full" required>
+                                <option value="" disabled selected>Select Segment</option>
+                            </select>
+                            <div id="hero-segmentError" class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <select id="hero-investment" class="w-full" required>
+                                <option value="" disabled selected>Select Investment Amount</option>
+                            </select>
+                            <div id="hero-investmentError" class="error-message"></div>
+                        </div>
+                        <div class="form-group">
+                            <select id="hero-language" class="w-full" required>
+                                <option value="" disabled selected>Select Language</option>
+                            </select>
+                            <div id="hero-languageError" class="error-message"></div>
+                        </div>
+                        <div class="checkbox-group">
+                            <input
+                                type="checkbox"
+                                id="hero-consent"
+                                checked
+                            />
+                            <label for="hero-consent">
+                                I agree to the terms and conditions
+                            </label>
+                            <div id="hero-consentError" class="error-message"></div>
+                        </div>
+                        <button
+                            type="submit"
+                            class="submit-btn"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Who Are We Section -->
+    <section class="section-transition" id="aboutus" style="background-color: #1B1B1B;">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6 text-white">Who Are We</h2>
+            <p class="text-lg mb-10 mx-auto text-gray-300">We are TWM Research Alert, a premier SEBI-registered research analyst based in Mumbai, India. We are dedicated to providing reliable and insightful stock and index recommendations to our valued clients.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+                    <span class="text-green-500 font-bold mr-2 bg-white rounded-full p-1 flex items-center justify-center" style="width: 20px; height: 20px;">&#10003;</span> Expert Analysts
+                </button>
+                <button class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+                    <span class="text-green-500 font-bold mr-2 bg-white rounded-full p-1 flex items-center justify-center" style="width: 20px; height: 20px;">&#10003;</span> Proven Track Record
+                </button>
+                <button class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+                    <span class="text-green-500 font-bold mr-2 bg-white rounded-full p-1 flex items-center justify-center" style="width: 20px; height: 20px;">&#10003;</span> Tailored Strategies
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Our Clients Say Section -->
+    <section class="section-transition" style="background-color: #121212;">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6 text-white">What Our Clients Say</h2>
+            <p class="text-lg mb-10 text-gray-300">Trusted by investors across India since 98% Client Satisfaction Rate</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+                <div class="testimonial-card bg-white border border-gray-300 rounded-lg shadow-lg p-6">
+                    <p class="text-gray-800 italic mb-6">"Their stock picks have been spot-on, helping me achieve consistent returns. The personalized advice is a game-changer!"</p>
+                    <div class="flex items-center mt-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a2 2 0 100-4H7a2 2 0 100 4m0 0v6m6-6v6" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <p class="font-semibold text-gray-900">Rakesh Sharma</p>
+                            <p class="text-sm text-gray-600">Business Owner, Mumbai</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card bg-white border border-gray-300 rounded-lg shadow-lg p-6">
+                    <p class="text-gray-800 italic mb-6">"The intraday trading tips are timely and accurate. I've grown my portfolio significantly with their guidance."</p>
+                    <div class="flex items-center mt-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a2 2 0 100-4H7a2 2 0 100 4m0 0v6m6-6v6" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <p class="font-semibold text-gray-900">Priya Patel</p>
+                            <p class="text-sm text-gray-600">Investor, Delhi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card bg-white border border-gray-300 rounded-lg shadow-lg p-6">
+                    <p class="text-gray-800 italic mb-6">"As a beginner, their expert support and market insights gave me the confidence to trade successfully."</p>
+                    <div class="flex items-center mt-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a2 2 0 100-4H7a2 2 0 100 4m0 0v6m6-6v6" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <p class="font-semibold text-gray-900">Vikram Singh</p>
+                            <p class="text-sm text-gray-600">Trader, Bangalore</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-lg mt-10 text-gray-300">SEBI-Registered Analysts Providing Personalized Trading Strategies</p>
+            <p class="text-lg text-gray-300">Join over 1000+ Active Traders Today</p>
+            <button onclick="showClientFormPopup();" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-3 px-6 rounded-lg mt-10 shadow-lg hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                Get Started with our Trade Gurantee Package
+            </button>
+        </div>
+    </section>
+
+    <!-- Client Form Popup -->
+    <div class="popup-overlay" id="client-popup-overlay" style="display: none;"></div>
+    <div class="popup" id="client-popup" style="display: none;">
+        <button class="close-btn" id="close-client-popup">&times;</button>
+        <h2 class="text-xl font-bold mb-4">Get a Call Back from our Experts</h2>
+        <form class="space-y-4">
+            <div id="form-container" class="form-container" style="margin: 0px !important; box-shadow: none; padding: 0px;">
+                <div class="space-y-4">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      id="fullName"
+                      placeholder="Full Name"
+                      required
+                    />
+                    <div id="fullNameError" class="error-message"></div>
+                  </div>
+           
+                  <div class="form-group">
+                    <input
+                      type="number"
+                      id="phone"
+                      placeholder="Phone"
+                      required
+                    />
+                    <div id="phoneError" class="error-message"></div>
+                  </div>
+           
+                  <div class="form-group">
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="Email Address"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                        <select id="segment" class="w-full" required>
+                          <option value="" disabled selected>Select Segment</option>
+                        </select>
+                        <div id="segmentError" class="error-message"></div>
+                      </div>
+
+                  <div class="form-group">
+                    <select id="language" class="w-full" required>
+                      <option value="" disabled selected>Select Language</option>
+                    </select>
+                    <div id="languageError" class="error-message"></div>
+                  </div>
+           
+                  <div class="checkbox-group">
+                    <input
+                      type="checkbox"
+                      id="consent"
+                      checked
+                    />
+                    <label for="consent">
+                      I agree to the terms and conditions
+                    </label>
+                  </div>
+           
+                  <button
+                    id="submitBtn"
+                    class="submit-btn"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+        </form>
+    </div>
+
+    <!-- Our Expert Services Section -->
+    <section class="section-transition bg-gray-100" id="services">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">Our Expert Services</h2>
+            <p class="text-lg mb-10 max-w-2xl mx-auto">Unlock your investment potential with our proven strategies and expert guidance</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Stock Cash Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Stock Cash Advice</h3>
+                    <p class="text-gray-600 mb-6">Perfect for small to medium investors seeking consistent cash market gains. Get 1-2 daily expert recommendations, totaling 20-22 per month, delivered via SMS or phone with precise entry and exit timing.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+                <!-- Stock Future Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Stock Future Advice</h3>
+                    <p class="text-gray-600 mb-6">Ideal for futures traders wanting reliable profits. Receive 1-2 daily stock future picks, 20-22 monthly, with timely SMS or phone support for optimal trades.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+                <!-- Nifty Future Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Nifty Future Advice</h3>
+                    <p class="text-gray-600 mb-6">Designed for Nifty and Bank Nifty futures investors. Get 3-4 weekly expert tips via SMS or phone, with clear entry and exit points for maximum gains.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+                <!-- Bank Nifty Future Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Bank Nifty Future Advice</h3>
+                    <p class="text-gray-600 mb-6">Tailored for Bank Nifty futures enthusiasts. Enjoy 3-4 weekly recommendations via SMS or phone, ensuring timely and profitable trades.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+                <!-- Nifty Option Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Nifty Option Advice</h3>
+                    <p class="text-gray-600 mb-6">Great for options traders targeting Nifty and Bank Nifty. Receive 3-4 weekly expert picks via SMS or phone, with precise timing for success.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+                <!-- Bank Nifty Option Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Bank Nifty Option Advice</h3>
+                    <p class="text-gray-600 mb-6">Perfect for Bank Nifty options investors. Get 3-4 weekly tips via SMS or phone, designed for profitable entry and exit strategies.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+                <!-- Stock Option Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Stock Option Advice</h3>
+                    <p class="text-gray-600 mb-6">Suited for stock options traders seeking steady wins. Enjoy 1-2 daily recommendations, 20-22 monthly, via SMS or phone with expert timing.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+                <!-- Commodity Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Commodity Advice</h3>
+                    <p class="text-gray-600 mb-6">Expert commodity trading tips for maximizing your market potential. Get timely recommendations via SMS or phone for profitable trades.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+                <!-- Index Option Advice -->
+                <div class="service-card text-center">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-4">Index Option Advice</h3>
+                    <p class="text-gray-600 mb-6">Leverage our index option strategies for better trading outcomes. Get 3-4 weekly tips via SMS or phone for precise entry and exit points.</p>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+                        Try Now
+                    </button>
+                </div>
+
+                <!-- Adding missing services to the service section -->
+<!-- Index Future Advice -->
+<div class="service-card text-center">
+  <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+  </svg>
+  <h3 class="text-xl font-semibold mb-4">Index Future Advice</h3>
+  <p class="text-gray-600 mb-6">Get expert recommendations for trading index futures. Receive timely updates for profitable trades.</p>
+  <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+      Try Now
+  </button>
+</div>
+
+<!-- Swing Trading -->
+<div class="service-card text-center">
+  <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+  </svg>
+  <h3 class="text-xl font-semibold mb-4">Swing Trading</h3>
+  <p class="text-gray-600 mb-6">Maximize your returns with our expert swing trading strategies. Receive timely recommendations for profitable trades.</p>
+  <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+      Try Now
+  </button>
+</div>
+
+<!-- TWM Package -->
+<div class="service-card text-center">
+  <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+  </svg>
+  <h3 class="text-xl font-semibold mb-4">TWM Package</h3>
+  <p class="text-gray-600 mb-6">Comprehensive trading solutions tailored to your needs. Get access to all our premium services in one package.</p>
+  <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+      Try Now
+  </button>
+</div>
+
+<!-- Forex -->
+<div class="service-card text-center">
+  <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+  </svg>
+  <h3 class="text-xl font-semibold mb-4">Forex</h3>
+  <p class="text-gray-600 mb-6">Stay ahead in the forex market with our expert trading strategies and timely recommendations.</p>
+  <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+      Try Now
+  </button>
+</div>
+
+<!-- International Club Commodities -->
+<div class="service-card text-center">
+  <svg class="w-12 h-12 mx-auto mb-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3-3 4 4 3-3 4 4v6H3z" />
+  </svg>
+  <h3 class="text-xl font-semibold mb-4">International Club Commodities</h3>
+  <p class="text-gray-600 mb-6">Access exclusive insights and strategies for trading international commodities. Join our club for premium benefits.</p>
+  <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-110">
+      Try Now
+  </button>
+</div>
+               
+            </div>
+        </div>
+    </section>
+
+    <!-- Still Not Sure Section -->
+    <section class="section-transition" style="background-color: #0F0F0F;">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6 text-white">Still Not Sure or Confused About <br>Which Plan to Choose?</h2>
+            <p class="text-lg mb-10 max-w-2xl mx-auto text-gray-200">
+                We understand that choosing the right stock market advisory service can feel overwhelming. Whether you're a beginner or an experienced trader, our team is here to guide you every step of the way to help you find the perfect plan tailored to your trading goals!
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="still-not-sure-card text-center bg-white text-gray-800 p-6 rounded-lg shadow-lg flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Talk to an Expert</h3>
+                        <p class="text-gray-600 mb-6">Schedule a free consultation with our SEBI-registered analysts and get personalized recommendations.</p>
+                    </div>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-6 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-105">
+                        Get a Call Back
+                    </button>
+                </div>
+                <div class="still-not-sure-card text-center bg-white text-gray-800 p-6 rounded-lg shadow-lg flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Try Before You Buy</h3>
+                        <p class="text-gray-600 mb-6">Experience our services with our Expert stock picks and market insights, no commitment required.</p>
+                    </div>
+                    <button class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-6 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-105">
+                        Speak With our Expert
+                    </button>
+                </div>
+                <div class="still-not-sure-card text-center bg-white text-gray-800 p-6 rounded-lg shadow-lg flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Explore Our Plans</h3>
+                        <p class="text-gray-600 mb-6">Compare our subscription plans to find the one that best fits your trading style and budget.</p>
+                    </div>
+                    <a href="#services" onclick="document.getElementById('services').scrollIntoView({ behavior: 'smooth' });" class="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-6 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition duration-300 transform hover:scale-105">
+                        View Plans
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="py-12 bg-gray-900 text-white">
+        <div class="container mx-auto px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="text-left">
+                    <img src="https://twmresearchalert.com/assets/twm-MVVlZ4iD.webp" alt="TWM Research Alert Logo" class="mb-4">
+                    <p class="text-sm italic">"The stock market rewards those who stay disciplined and patient." - Warren Buffett</p>
+                    <p class="text-sm mt-2">TWM Research Alert Empowering Wealth Creation Since 2015</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#hero" onclick="document.querySelector('.hero-grid').scrollIntoView({ behavior: 'smooth' });" class="footer-link text-gray-300 hover:text-blue-400">Home</a></li>
+                        <li><a href="#aboutus" onclick="document.getElementById('aboutus').scrollIntoView({ behavior: 'smooth' });" class="footer-link text-gray-300 hover:text-blue-400">About Us</a></li>
+                        <li><a href="#services" onclick="document.getElementById('services').scrollIntoView({ behavior: 'smooth' });" class="footer-link text-gray-300 hover:text-blue-400">Our Services</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#help" onclick="showHelpForm();" class="footer-link text-gray-300 hover:text-blue-400">Help</a></li>
+                        <li><a href="#" onclick="showTermsPopup();" class="footer-link text-gray-300 hover:text-blue-400">Terms & Conditions</a></li>
+                        <li><a href="#" onclick="showPrivacyPopup();" class="footer-link text-gray-300 hover:text-blue-400">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="text-right">
+                    <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                    <p class="text-sm">Email: support@twmresearchalert.com</p>
+                    <p class="text-sm">Phone: +91 9769960695</p>
+                </div>
+            </div>
+            <p class="text-sm mt-8 text-center border-t border-gray-700 pt-4">© 2025 TWM Research Alert. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Terms and Conditions Popup -->
+    <div class="popup-overlay" id="terms-popup-overlay" style="display: none;"></div>
+    <div class="popup" id="terms-popup" style="display: none;">
+        <button class="close-btn" id="close-terms-popup">&times;</button>
+        <h2 class="text-xl font-bold mb-4">Terms and Conditions</h2>
+        <ul class="list-disc list-inside text-gray-700 space-y-2">
+            <li><strong>Service Nature:</strong> TWM Research Alert provides independent equity research services and is not an investment advisor.</li>
+            <li><strong>User Responsibilities:</strong> Users are solely responsible for their trading and investment decisions.</li>
+            <li><strong>No Refund Policy:</strong> All payments made for services are final.</li>
+            <li><strong>Intellectual Property:</strong> All content is the intellectual property of TWM Research Alert.</li>
+            <li><strong>Limitation of Liability:</strong> TWM Research Alert is not liable for any losses or damages arising from the use of their services.</li>
+            <li><strong>Compliance and Conduct:</strong> Users must comply with all applicable laws and regulations.</li>
+            <li><strong>Jurisdiction:</strong> These terms are governed by the laws of India.</li>
+        </ul>
+    </div>
+
+    <!-- Privacy Policy Popup -->
+    <div class="popup-overlay" id="privacy-popup-overlay" style="display: none;"></div>
+    <div class="popup" id="privacy-popup" style="display: none;">
+        <button class="close-btn" id="close-privacy-popup">&times;</button>
+        <h2 class="text-xl font-bold mb-4">Privacy Policy</h2>
+        <ul class="list-disc list-inside text-gray-700 space-y-2">
+            <li><strong>Information Collection:</strong> TWM Research Alert collects personal information from clients.</li>
+            <li><strong>Use of Information:</strong> The collected information is used to provide and improve services.</li>
+            <li><strong>Information Sharing:</strong> TWM Research Alert does not share personal information without explicit consent.</li>
+            <li><strong>Data Security:</strong> Security measures are in place to protect personal information.</li>
+            <li><strong>Changes to the Privacy Policy:</strong> TWM Research Alert reserves the right to update the policy at any time.</li>
+        </ul>
+    </div>
+
+    <!-- Help Form Popup -->
+    <div class="popup-overlay" id="help-popup-overlay" style="display: none;"></div>
+    <div class="popup" id="help-popup" style="display: none;">
+        <button class="close-btn" id="close-help-popup">&times;</button>
+        <h2 class="text-xl font-bold mb-4">Help Form</h2>
+        <form class="space-y-4">
+          <div id="form-container" class="form-container" style="margin: 0px !important; box-shadow: none; padding: 0px;">
+            <div class="space-y-4">
+              <div class="form-group">
+                <input
+                  type="text"
+                  id="fullName"
+                  placeholder="Full Name"
+                  required
+                />
+                <div id="fullNameError" class="error-message"></div>
+              </div>
+       
+              <div class="form-group">
+                <input
+                  type="number"
+                  id="phone"
+                  placeholder="Phone"
+                  required
+                />
+                <div id="phoneError" class="error-message"></div>
+              </div>
+       
+              <div class="form-group">
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Email Address"
+                />
+              </div>
+
+              <div class="form-group">
+                        <select id="segment" class="w-full" required>
+                          <option value="" disabled selected>Select Segment</option>
+                        </select>
+                        <div id="segmentError" class="error-message"></div>
+                      </div>
+
+              <div class="form-group">
+                <select id="language" class="w-full" required>
+                  <option value="" disabled selected>Select Language</option>
+                </select>
+                <div id="languageError" class="error-message"></div>
+              </div>
+       
+              <div class="checkbox-group">
+                <input
+                  type="checkbox"
+                  id="consent"
+                  checked
+                />
+                <label for="consent">
+                  I agree to the terms and conditions
+                </label>
+              </div>
+       
+              <button
+                id="submitBtn"
+                class="submit-btn"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('popup').style.display = 'block';
+                document.getElementById('popup-overlay').style.display = 'block';
+            }, 5000); // Show popup after 5 seconds
+
+            document.getElementById('close-popup').addEventListener('click', () => {
+                document.getElementById('popup').style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
+
+                // Show the second popup after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('second-popup').style.display = 'block';
+                    document.getElementById('second-popup-overlay').style.display = 'block';
+                }, 5000);
+            });
+
+            document.getElementById('popup-overlay').addEventListener('click', () => {
+                document.getElementById('popup').style.display = 'none';
+                document.getElementById('popup-overlay').style.display = 'none';
+            });
+
+            document.getElementById('close-second-popup').addEventListener('click', () => {
+                document.getElementById('second-popup').style.display = 'none';
+                document.getElementById('second-popup-overlay').style.display = 'none';
+            });
+
+            document.getElementById('second-popup-overlay').addEventListener('click', () => {
+                document.getElementById('second-popup').style.display = 'none';
+                document.getElementById('second-popup-overlay').style.display = 'none';
+            });
+        });
+
+        const whatsappButton = document.getElementById('whatsapp-button');
+        const whatsappForm = document.getElementById('whatsapp-form');
+        const closeWhatsappForm = document.getElementById('close-whatsapp-form');
+
+        whatsappButton.addEventListener('click', () => {
+            whatsappForm.style.display = 'block';
+        });
+
+        closeWhatsappForm.addEventListener('click', () => {
+            whatsappForm.style.display = 'none';
+        });
+
+        const sectionButtons = document.querySelectorAll('.still-not-sure-card button, .service-card button');
+        const sectionPopup = document.getElementById('section-popup');
+        const sectionPopupOverlay = document.getElementById('section-popup-overlay');
+        const sectionPopupHeading = document.getElementById('section-popup-heading');
+        const closeSectionPopup = document.getElementById('close-section-popup');
+
+        sectionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                sectionPopupHeading.textContent = button.textContent.trim(); // Set heading to button text
+                sectionPopup.style.display = 'block';
+                sectionPopupOverlay.style.display = 'block';
+            });
+        });
+
+        closeSectionPopup.addEventListener('click', () => {
+            sectionPopup.style.display = 'none';
+            sectionPopupOverlay.style.display = 'none';
+        });
+
+        sectionPopupOverlay.addEventListener('click', () => {
+            sectionPopup.style.display = 'none';
+            sectionPopupOverlay.style.display = 'none';
+        });
+
+        // Show Help Form Popup
+        function showHelpForm() {
+            document.getElementById('help-popup').style.display = 'block';
+            document.getElementById('help-popup-overlay').style.display = 'block';
+        }
+
+        // Close Help Form Popup
+        document.getElementById('close-help-popup').addEventListener('click', () => {
+            document.getElementById('help-popup').style.display = 'none';
+            document.getElementById('help-popup-overlay').style.display = 'none';
+        });
+
+        document.getElementById('help-popup-overlay').addEventListener('click', () => {
+            document.getElementById('help-popup').style.display = 'none';
+            document.getElementById('help-popup-overlay').style.display = 'none';
+        });
+
+        // Show Terms and Conditions Popup
+        function showTermsPopup() {
+            document.getElementById('terms-popup').style.display = 'block';
+            document.getElementById('terms-popup-overlay').style.display = 'block';
+        }
+
+        // Close Terms and Conditions Popup
+        document.getElementById('close-terms-popup').addEventListener('click', () => {
+            document.getElementById('terms-popup').style.display = 'none';
+            document.getElementById('terms-popup-overlay').style.display = 'none';
+        });
+
+        document.getElementById('terms-popup-overlay').addEventListener('click', () => {
+            document.getElementById('terms-popup').style.display = 'none';
+            document.getElementById('terms-popup-overlay').style.display = 'none';
+        });
+
+        // Show Privacy Policy Popup
+        function showPrivacyPopup() {
+            document.getElementById('privacy-popup').style.display = 'block';
+            document.getElementById('privacy-popup-overlay').style.display = 'block';
+        }
+
+        // Close Privacy Policy Popup
+        document.getElementById('close-privacy-popup').addEventListener('click', () => {
+            document.getElementById('privacy-popup').style.display = 'none';
+            document.getElementById('privacy-popup-overlay').style.display = 'none';
+        });
+
+        document.getElementById('privacy-popup-overlay').addEventListener('click', () => {
+            document.getElementById('privacy-popup').style.display = 'none';
+            document.getElementById('privacy-popup-overlay').style.display = 'none';
+        });
+
+        // Show Client Form Popup
+        function showClientFormPopup() {
+            document.getElementById('client-popup').style.display = 'block';
+            document.getElementById('client-popup-overlay').style.display = 'block';
+        }
+
+        // Close Client Form Popup
+        document.getElementById('close-client-popup').addEventListener('click', () => {
+            document.getElementById('client-popup').style.display = 'none';
+            document.getElementById('client-popup-overlay').style.display = 'none';
+        });
+
+        document.getElementById('client-popup-overlay').addEventListener('click', () => {
+            document.getElementById('client-popup').style.display = 'none';
+            document.getElementById('client-popup-overlay').style.display = 'none';
+        });
+
+        // Show Enquire Now Form Popup
+        function showEnquireFormPopup() {
+            document.getElementById('enquire-popup').style.display = 'block';
+            document.getElementById('enquire-popup-overlay').style.display = 'block';
+        }
+
+        // Close Enquire Now Form Popup
+        document.getElementById('close-enquire-popup').addEventListener('click', () => {
+            document.getElementById('enquire-popup').style.display = 'none';
+            document.getElementById('enquire-popup-overlay').style.display ='none';
+        });
+
+        document.getElementById('enquire-popup-overlay').addEventListener('click', () => {
+            document.getElementById('enquire-popup').style.display = 'none';
+            document.getElementById('enquire-popup-overlay').style.display = 'none';
+        });
+    </script>
+
+<!--script>
+
+    const indianStates = [
+      "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
+      "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+      "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+      "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", "Lakshadweep", "Delhi", "Puducherry"
+    ];
+
+    const option_Type = [
+      { value: "Equity", label: "Equity" },
+      { value: "Stock Option", label: "Stock Option" },
+      { value: "Stock Future", label: "Stock Future" },
+      { value: "Index Option", label: "Index Option" },
+      { value: "Index Future", label: "Index Future" },
+      { value: "Swing Trading", label: "Swing Trading" },
+      { value: "TWM Package (All In One)", label: "TWM Package (All In One)" },
+      { value: "MCX Commodities", label: "MCX Commodities" },
+      { value: "Forex", label: "Forex" },
+      { value: "International Club Commodities", label: "International Club Commodities" }
+    ];
+
+    const amount_Range = [
+      { value: "10000 to 20000", label: "10000 to 20000" },
+      { value: "20001 to 30000", label: "20001 to 30000" },
+      { value: "30001 to 40000", label: "30001 to 40000" },
+      { value: "40001 to 50000", label: "40001 to 50000" },
+      { value: "50001 to 75000", label: "50001 to 75000" },
+      { value: "75000 to 100000", label: "75000 to 100000" },
+      { value: "Above Rs 1 Lakhs", label: "Above Rs 1 Lakhs" },
+      { value: "Above Rs 3 Lakhs", label: "Above Rs 3 Lakhs" },
+      { value: "Above Rs 5 Lakhs", label: "Above Rs 5 Lakhs" }
+    ];
+
+    const languages = [
+      { value: "hindi", label: "Hindi" },
+      { value: "english", label: "English" },
+      { value: "andh", label: "Andh" },
+      { value: "arabi", label: "Arabic" },
+      { value: "asami", label: "Assamese" },
+      { value: "beng", label: "Bengali" },
+      { value: "bodo", label: "Bodo" },
+      { value: "dogri", label: "Dogri" },
+      { value: "gujarati", label: "Gujarati" },
+      { value: "kan", label: "Kannada" },
+      { value: "kashmiri", label: "Kashmiri" },
+      { value: "konkani", label: "Konkani" },
+      { value: "maithili", label: "Maithili" },
+      { value: "malayalam", label: "Malayalam" },
+      { value: "manipuri", label: "Manipuri" },
+      { value: "marathi", label: "Marathi" },
+      { value: "nepali", label: "Nepali" },
+      { value: "odia", label: "Odia" },
+      { value: "punjabi", label: "Punjabi" },
+      { value: "sanskrit", label: "Sanskrit" },
+      { value: "santhali", label: "Santhali" },
+      { value: "sindhi", label: "Sindhi" },
+      { value: "tamil", label: "Tamil" },
+      { value: "telugu", label: "Telugu" },
+      { value: "urdu", label: "Urdu" }
+    ];
+
+    const formData = {
+      fullName: '',
+      phone: '',
+      email: '',
+      state: '',
+      segment: '',
+      investment: '',
+      language: '',
+      consent: true,
+      ipAddress: '',
+      utmSource: ''
+    };
+
+    // Global function to handle form submissions
+    function handleFormSubmit(formId, e) {
+      e.preventDefault();
+      const errors = {};
+      const currentForm = document.getElementById(formId);
+     
+      // Get form elements
+      const fullNameInput = currentForm.querySelector('[id$="fullName"]');
+      const phoneInput = currentForm.querySelector('[id$="phone"]');
+      const emailInput = currentForm.querySelector('[id$="email"]');
+      const stateSelect = currentForm.querySelector('[id$="state"]');
+      const segmentSelect = currentForm.querySelector('[id$="segment"]');
+      const investmentSelect = currentForm.querySelector('[id$="investment"]');
+      const languageSelect = currentForm.querySelector('[id$="language"]');
+      const consentCheckbox = currentForm.querySelector('[id$="consent"]');
+      const submitButton = e.target;
+
+      // Validate full name
+      const fullName = fullNameInput ? fullNameInput.value.trim() : '';
+      const nameRegex = /^[A-Za-z\s]+$/;
+      if (fullNameInput && !fullName) {
+        errors.fullNameError = 'Full name is required';
+      } else if (fullNameInput && !nameRegex.test(fullName)) {
+        errors.fullNameError = 'Invalid name (only alphabets and spaces allowed)';
+      } else {
+        formData.fullName = fullName;
+      }
+
+      // Validate phone
+      const phone = phoneInput ? phoneInput.value.trim() : '';
+      const phoneRegex = /^\d{10}$/;
+      if (phoneInput && !phone) {
+        errors.phoneError = 'Phone number is required';
+      } else if (phoneInput && !phoneRegex.test(phone)) {
+        errors.phoneError = 'Phone number must be 10 digits';
+      } else if (phoneInput) {
+        formData.phone =  phone;
+      }
+
+      // Capture optional fields
+      formData.email = emailInput ? emailInput.value.trim() : '';
+      formData.state = stateSelect ? ($(stateSelect).val() || '') : '';
+      formData.segment = segmentSelect ? ($(segmentSelect).val() || '') : '';
+      formData.investment = investmentSelect ? ($(investmentSelect).val() || '') : '';
+      formData.language = languageSelect ? ($(languageSelect).val() || '') : '';
+      formData.consent = consentCheckbox ? consentCheckbox.checked : true;
+
+      // Update error messages
+      if (currentForm.querySelector('[id$="fullNameError"]')) {
+        currentForm.querySelector('[id$="fullNameError"]').textContent = errors.fullNameError || '';
+      }
+      if (currentForm.querySelector('[id$="phoneError"]')) {
+        currentForm.querySelector('[id$="phoneError"]').textContent = errors.phoneError || '';
+      }
+      if (currentForm.querySelector('[id$="stateError"]')) {
+        currentForm.querySelector('[id$="stateError"]').textContent = '';
+      }
+      if (currentForm.querySelector('[id$="segmentError"]')) {
+        currentForm.querySelector('[id$="segmentError"]').textContent = '';
+      }
+      if (currentForm.querySelector('[id$="investmentError"]')) {
+        currentForm.querySelector('[id$="investmentError"]').textContent = '';
+      }
+      if (currentForm.querySelector('[id$="languageError"]')) {
+        currentForm.querySelector('[id$="languageError"]').textContent = '';
+      }
+
+      // Function to add error container to all email fields
+function addEmailErrorContainers() {
+  // Select all email input fields
+  const emailInputs = document.querySelectorAll('input[type="email"]');
+
+  emailInputs.forEach(emailInput => {
+    // Check if the error container already exists
+    if (!emailInput.nextElementSibling || !emailInput.nextElementSibling.id.includes('emailError')) {
+      // Create the error container
+      const errorContainer = document.createElement('div');
+      errorContainer.id = 'emailError';
+      errorContainer.className = 'error-message';
+      errorContainer.textContent = ''; // Initialize with no error message
+
+      // Insert the error container after the email input field
+      emailInput.parentNode.insertBefore(errorContainer, emailInput.nextSibling);
+    }
+  });
+}
+
+// Call the function to add error containers
+addEmailErrorContainers();
+
+      // Validate email
+    const email = emailInput ? emailInput.value.trim() : '';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailInput && !email) {
+      errors.emailError = 'Email is required';
+    } else if (emailInput && !emailRegex.test(email)) {
+      errors.emailError = 'Invalid email address';
+    } else if (emailInput) {
+      formData.email = email;
+    }
+
+    // Update error messages
+    if (currentForm.querySelector('[id$="emailError"]')) {
+      currentForm.querySelector('[id$="emailError"]').textContent = errors.emailError || '';
+    }
+
+      // Submit if no errors
+      if (Object.keys(errors).length === 0) {
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Submitting...';
+        submitButton.disabled = true;
+
+        // Log payload for debugging
+        console.log('Form data before submission:', formData);
+
+        fetch('https://twmresearchalert.com/subdomain/gateway/registrationget.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        })
+          .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', [...response.headers.entries()]);
+            if (!response.ok) {
+              let errorMsg = `HTTP error! Status: ${response.status}`;
+              if (response.status === 404) errorMsg = 'Endpoint not found (404)';
+              else if (response.status === 403) errorMsg = 'Access forbidden (403), possible CORS issue';
+              else if (response.status === 500) errorMsg = 'Server error (500)';
+              throw new Error(errorMsg);
+            }
+            return response.text();
+          })
+          .then(data => {
+            console.log('Response data:', data);
+            try {
+              const jsonData = JSON.parse(data);
+              console.log('Parsed JSON response:', jsonData);
+            } catch (e) {
+              console.log('Response is not JSON, raw text:', data);
+            }
+            const container = currentForm.closest('.form-container') || currentForm;
+            container.innerHTML = `
+              <div class="max-w-md mx-auto p-10 text-center">
+                <div class="bg-green-100 p-4 shadow-lg rounded-lg text-green-800">
+                  <h2 class="text-2xl font-semibold mb-4">Thank You!</h2>
+                  <p>You have successfully registered. <br /> We will get back to you soon.</p>
+                </div>
+              </div>
+            `;
+
+            window.location.href = 'https://twmresearchalert.com/thankyou/thankyou.html';
+          })
+          .catch(error => {
+            console.error('Submission error:', error.message);
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+            alert(`Failed to submit form: ${error.message}. Please check the console for details or contact support.`);
+          });
+      }
+    }
+
+    // Initialize Select2 after DOM is ready
+    $(document).ready(function() {
+      try {
+        // Initialize all state selects
+        $('select[id$="state"]').each(function() {
+          $(this).select2({
+            data: indianStates.map(state => ({ id: state, text: state })),
+            placeholder: 'Select State'
+          }).on('change', function() {
+            formData.state = $(this).val() || '';
+            $(this).closest('form').find('[id$="stateError"]').text('');
+          });
+        });
+
+        // Initialize all segment selects
+        $('select[id$="segment"]').each(function() {
+          $(this).select2({
+            data: segments.map(segment => ({ id: segment.value, text: segment.label })),
+            placeholder: 'Select Segment'
+          }).on('change', function() {
+            formData.segment = $(this).val() || '';
+            $(this).closest('form').find('[id$="segmentError"]').text('');
+          });
+        });
+
+        // Initialize all investment selects
+        $('select[id$="investment"]').each(function() {
+          $(this).select2({
+            data: investments.map(investment => ({ id: investment.value, text: investment.label })),
+            placeholder: 'Select Investment Amount'
+          }).on('change', function() {
+            formData.investment = $(this).val() || '';
+            $(this).closest('form').find('[id$="investmentError"]').text('');
+          });
+        });
+
+        // Initialize all language selects
+        $('select[id$="language"]').each(function() {
+          $(this).select2({
+            data: languages.map(language => ({ id: language.value, text: language.label })),
+            placeholder: 'Select Language'
+          }).on('change', function() {
+            formData.language = $(this).val() || '';
+            $(this).closest('form').find('[id$="languageError"]').text('');
+          });
+        });
+
+        // Get UTM parameter
+        const params = new URLSearchParams(window.location.search);
+        const utm = params.get('utm') || '';
+        formData.utmSource = utm;
+        console.log('UTM Source captured:', utm);
+
+        // Get IP address (optional)
+        fetch('https://api.ipify.org?format=json')
+          .then(response => response.json())
+          .then(data => {
+            formData.ipAddress = data.ip;
+            console.log('IP Address fetched:', data.ip);
+          })
+          .catch(error => {
+            console.error('Error fetching IP address:', error);
+            formData.ipAddress = '';
+          });
+
+        // Attach submit handlers to all forms
+        document.querySelectorAll('form').forEach(form => {
+          const formId = form.id || 'form-' + Math.random().toString(36).substr(2, 9);
+          form.id = formId;
+          const submitBtn = form.querySelector('button[type="submit"], button:not([type])');
+          if (submitBtn) {
+            submitBtn.addEventListener('click', (e) => handleFormSubmit(formId, e));
+          }
+        });
+
+        // Attach real-time validation to all forms
+        document.querySelectorAll('input[id$="fullName"]').forEach(input => {
+          input.addEventListener('input', function() {
+            const value = this.value.trim();
+            const nameRegex = /^[A-Za-z\s]+$/;
+            const errorEl = this.closest('form').querySelector('[id$="fullNameError"]');
+            if (value && !nameRegex.test(value)) {
+              errorEl.textContent = 'Invalid name (only alphabets and spaces allowed)';
+            } else {
+              errorEl.textContent = '';
+            }
+          });
+        });
+
+        document.querySelectorAll('input[id$="phone"]').forEach(input => {
+          input.addEventListener('input', function() {
+            const value = this.value.trim();
+            const phoneRegex = /^\d{10}$/;
+            const errorEl = this.closest('form').querySelector('[id$="phoneError"]');
+            if (value && !phoneRegex.test(value)) {
+              errorEl.textContent = 'Phone number must be 10 digits';
+            } else {
+              errorEl.textContent = '';
+            }
+          });
+        });
+
+        // Attach consent checkbox handlers
+        document.querySelectorAll('input[id$="consent"]').forEach(checkbox => {
+          checkbox.addEventListener('change', function() {
+            formData.consent = this.checked;
+          });
+        });
+
+        // Attach email input handlers
+        document.querySelectorAll('input[id$="email"]').forEach(input => {
+          input.addEventListener('input', function() {
+            formData.email = this.value.trim();
+          });
+        });
+      } catch (error) {
+        console.error('Error initializing forms:', error);
+      }
+    });
+  </script-->
+  <script>
+
+    const indianStates = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
+  "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+  "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", "Lakshadweep", "Delhi", "Puducherry"
+];
+
+const segments = [
+  { value: "Equity", label: "Equity" },
+  { value: "Stock Option", label: "Stock Option" },
+  { value: "Stock Future", label: "Stock Future" },
+  { value: "Index Option", label: "Index Option" },
+  { value: "Index Future", label: "Index Future" },
+  { value: "Swing Trading", label: "Swing Trading" },
+  { value: "TWM Package (All In One)", label: "TWM Package (All In One)" },
+  { value: "MCX Commodities", label: "MCX Commodities" },
+  { value: "Forex", label: "Forex" },
+  { value: "International Club Commodities", label: "International Club Commodities" }
+];
+
+const investments = [
+  { value: "10000 to 20000", label: "10000 to 20000" },
+  { value: "20001 to 30000", label: "20001 to 30000" },
+  { value: "30001 to 40000", label: "30001 to 40000" },
+  { value: "40001 to 50000", label: "40001 to 50000" },
+  { value: "50001 to 75000", label: "50001 to 75000" },
+  { value: "75000 to 100000", label: "75000 to 100000" },
+  { value: "Above Rs 1 Lakhs", label: "Above Rs 1 Lakhs" },
+  { value: "Above Rs 3 Lakhs", label: "Above Rs 3 Lakhs" },
+  { value: "Above Rs 5 Lakhs", label: "Above Rs 5 Lakhs" }
+];
+
+const languages = [
+  { value: "hindi", label: "Hindi" },
+  { value: "english", label: "English" },
+  { value: "andh", label: "Andh" },
+  { value: "arabi", label: "Arabic" },
+  { value: "asami", label: "Assamese" },
+  { value: "beng", label: "Bengali" },
+  { value: "bodo", label: "Bodo" },
+  { value: "dogri", label: "Dogri" },
+  { value: "gujarati", label: "Gujarati" },
+  { value: "kan", label: "Kannada" },
+  { value: "kashmiri", label: "Kashmiri" },
+  { value: "konkani", label: "Konkani" },
+  { value: "maithili", label: "Maithili" },
+  { value: "malayalam", label: "Malayalam" },
+  { value: "manipuri", label: "Manipuri" },
+  { value: "marathi", label: "Marathi" },
+  { value: "nepali", label: "Nepali" },
+  { value: "odia", label: "Odia" },
+  { value: "punjabi", label: "Punjabi" },
+  { value: "sanskrit", label: "Sanskrit" },
+  { value: "santhali", label: "Santhali" },
+  { value: "sindhi", label: "Sindhi" },
+  { value: "tamil", label: "Tamil" },
+  { value: "telugu", label: "Telugu" },
+  { value: "urdu", label: "Urdu" }
+];
+
+const formData = {
+  fullName: '',
+  phone: '',
+  email: '',
+  state: '',
+  segment: '',
+  investment: '',
+  language: '',
+  consent: false,
+  ipAddress: '',
+  utmSource: ''
+};
+
+// Function to add error container after each input and select
+function addErrorContainers() {
+  const fields = [
+    { selector: 'input[id$="fullName"]', id: 'fullNameError' },
+    { selector: 'input[id$="phone"]', id: 'phoneError' },
+    { selector: 'input[id$="email"]', id: 'emailError' },
+    { selector: 'select[id$="state"]', id: 'stateError' },
+    { selector: 'select[id$="segment"]', id: 'segmentError' },
+    { selector: 'select[id$="investment"]', id: 'investmentError' },
+    { selector: 'select[id$="language"]', id: 'languageError' },
+    { selector: 'input[id$="consent"]', id: 'consentError' }
+  ];
+
+  fields.forEach(field => {
+    document.querySelectorAll(field.selector).forEach(element => {
+      if (!element.nextElementSibling || !element.nextElementSibling.id.includes(field.id)) {
+        const errorContainer = document.createElement('div');
+        errorContainer.id = field.id;
+        errorContainer.className = 'error-message text-red-500 text-sm mt-1';
+        errorContainer.textContent = '';
+        element.parentNode.insertBefore(errorContainer, element.nextSibling);
+      }
+    });
+  });
+}
+
+// Global function to handle form submissions
+function handleFormSubmit(formId, e) {
+  e.preventDefault();
+  const errors = {};
+  const currentForm = document.getElementById(formId);
+  
+  // Get form elements
+  const fullNameInput = currentForm.querySelector('[id$="fullName"]');
+  const phoneInput = currentForm.querySelector('[id$="phone"]');
+  const emailInput = currentForm.querySelector('[id$="email"]');
+  const stateSelect = currentForm.querySelector('[id$="state"]');
+  const segmentSelect = currentForm.querySelector('[id$="segment"]');
+  const investmentSelect = currentForm.querySelector('[id$="investment"]');
+  const languageSelect = currentForm.querySelector('[id$="language"]');
+  const consentCheckbox = currentForm.querySelector('[id$="consent"]');
+  const submitButton = e.target;
+
+  // Validate full name
+  const fullName = fullNameInput ? fullNameInput.value.trim() : '';
+  const nameRegex = /^[A-Za-z\s]+$/;
+  if (!fullName) {
+    errors.fullNameError = 'Full name is required';
+  } else if (!nameRegex.test(fullName)) {
+    errors.fullNameError = 'Invalid name (only alphabets and spaces allowed)';
+  } else {
+    formData.fullName = fullName;
+  }
+
+  // Validate phone
+  const phone = phoneInput ? phoneInput.value.trim() : '';
+  const phoneRegex = /^\d{10}$/;
+  if (!phone) {
+    errors.phoneError = 'Phone number is required';
+  } else if (!phoneRegex.test(phone)) {
+    errors.phoneError = 'Phone number must be 10 digits';
+  } else {
+    formData.phone = phone;
+  }
+
+  // Validate email
+  const email = emailInput ? emailInput.value.trim() : '';
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email) {
+    errors.emailError = 'Email is required';
+  } else if (!emailRegex.test(email)) {
+    errors.emailError = 'Invalid email address';
+  } else {
+    formData.email = email;
+  }
+
+  // Validate state
+  const state = stateSelect ? $(stateSelect).val() || '' : '';
+  if (!state) {
+    errors.stateError = 'State is required';
+  } else {
+    formData.state = state;
+  }
+
+  // Validate segment
+  const segment = segmentSelect ? $(segmentSelect).val() || '' : '';
+  if (!segment) {
+    errors.segmentError = 'Segment is required';
+  } else {
+    formData.segment = segment;
+  }
+
+  // Validate investment
+  const investment = investmentSelect ? $(investmentSelect).val() || '' : '';
+  if (!investment) {
+    errors.investmentError = 'Investment amount is required';
+  } else {
+    formData.investment = investment;
+  }
+
+  // Validate language
+  const language = languageSelect ? $(languageSelect).val() || '' : '';
+  if (!language) {
+    errors.languageError = 'Language is required';
+ 2} else {
+    formData.language = language;
+  }
+
+  // Validate consent
+  const consent = consentCheckbox ? consentCheckbox.checked : false;
+  if (!consent) {
+    errors.consentError = 'You must agree to the terms';
+  } else {
+    formData.consent = consent;
+  }
+
+  // Update error messages
+  currentForm.querySelector('[id$="fullNameError"]').textContent = errors.fullNameError || '';
+  currentForm.querySelector('[id$="phoneError"]').textContent = errors.phoneError || '';
+  currentForm.querySelector('[id$="emailError"]').textContent = errors.emailError || '';
+  currentForm.querySelector('[id$="stateError"]').textContent = errors.stateError || '';
+  currentForm.querySelector('[id$="segmentError"]').textContent = errors.segmentError || '';
+  currentForm.querySelector('[id$="investmentError"]').textContent = errors.investmentError || '';
+  currentForm.querySelector('[id$="languageError"]').textContent = errors.languageError || '';
+  currentForm.querySelector('[id$="consentError"]').textContent = errors.consentError || '';
+
+  // Submit if no errors
+  if (Object.keys(errors).length === 0) {
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'Submitting...';
+    submitButton.disabled = true;
+
+    // Log payload for debugging
+    console.log('Form data before submission:', formData);
+
+    fetch('https://twmresearchalert.com/subdomain/gateway/registrationget.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+      .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', [...response.headers.entries()]);
+        if (!response.ok) {
+          let errorMsg = `HTTP error! Status: ${response.status}`;
+          if (response.status === 404) errorMsg = 'Endpoint not found (404)';
+          else if (response.status === 403) errorMsg = 'Access forbidden (403), possible CORS issue';
+          else if (response.status === 500) errorMsg = 'Server error (500)';
+          throw new Error(errorMsg);
+        }
+        return response.text();
+      })
+      .then(data => {
+        console.log('Response data:', data);
+        try {
+          const jsonData = JSON.parse(data);
+          console.log('Parsed JSON response:', jsonData);
+        } catch (e) {
+          console.log('Response is not JSON, raw text:', data);
+        }
+        const container = currentForm.closest('.form-container') || currentForm;
+        container.innerHTML = `
+          <div class="max-w-md mx-auto p-10 text-center">
+            <div class="bg-green-100 p-4 shadow-lg rounded-lg text-green-800">
+              <h2 class="text-2xl font-semibold mb-4">Thank You!</h2>
+              <p>You have successfully registered. <br /> We will get back to you soon.</p>
+            </div>
+          </div>
+        `;
+        window.location.href = 'https://twmresearchalert.com/thankyou/thankyou.html';
+      })
+      .catch(error => {
+        console.error('Submission error:', error.message);
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+        alert(`Failed to submit form: ${error.message}. Please check the console for details or contact support.`);
+      });
+  }
+}
+
+// Initialize Select2 after DOM is ready
+$(document).ready(function() {
+  try {
+    // Add error containers for all fields
+    addErrorContainers();
+
+    // Initialize all state selects
+    $('select[id$="state"]').each(function() {
+      $(this).select2({
+        data: indianStates.map(state => ({ id: state, text: state })),
+        placeholder: 'Select State'
+      }).on('change', function() {
+        formData.state = $(this).val() || '';
+        $(this).closest('form').find('[id$="stateError"]').text(formData.state ? '' : 'State is required');
+      });
+    });
+
+    // Initialize all segment selects
+    $('select[id$="segment"]').each(function() {
+      $(this).select2({
+        data: segments.map(segment => ({ id: segment.value, text: segment.label })),
+        placeholder: 'Select Segment'
+      }).on('change', function() {
+        formData.segment = $(this).val() || '';
+        $(this).closest('form').find('[id$="segmentError"]').text(formData.segment ? '' : 'Segment is required');
+      });
+    });
+
+    // Initialize all investment selects
+    $('select[id$="investment"]').each(function() {
+      $(this).select2({
+        data: investments.map(investment => ({ id: investment.value, text: investment.label })),
+        placeholder: 'Select Investment Amount'
+      }).on('change', function() {
+        formData.investment = $(this).val() || '';
+        $(this).closest('form').find('[id$="investmentError"]').text(formData.investment ? '' : 'Investment amount is required');
+      });
+    });
+
+    // Initialize all language selects
+    $('select[id$="language"]').each(function() {
+      $(this).select2({
+        data: languages.map(language => ({ id: language.value, text: language.label })),
+        placeholder: 'Select Language'
+      }).on('change', function() {
+        formData.language = $(this).val() || '';
+        $(this).closest('form').find('[id$="languageError"]').text(formData.language ? '' : 'Language is required');
+      });
+    });
+
+    // Get UTM parameter
+    const params = new URLSearchParams(window.location.search);
+    const utm = params.get('utm') || '';
+    formData.utmSource = utm;
+    console.log('UTM Source captured:', utm);
+
+    // Get IP address (optional)
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        formData.ipAddress = data.ip;
+        console.log('IP Address fetched:', data.ip);
+      })
+      .catch(error => {
+        console.error('Error fetching IP address:', error);
+        formData.ipAddress = '';
+      });
+
+    // Attach submit handlers to all forms
+    document.querySelectorAll('form').forEach(form => {
+      const formId = form.id || 'form-' + Math.random().toString(36).substr(2, 9);
+      form.id = formId;
+      const submitBtn = form.querySelector('button[type="submit"], button:not([type])');
+      if (submitBtn) {
+        submitBtn.addEventListener('click', (e) => handleFormSubmit(formId, e));
+      }
+    });
+
+    // Attach real-time validation to all forms
+    document.querySelectorAll('input[id$="fullName"]').forEach(input => {
+      input.addEventListener('input', function() {
+        const value = this.value.trim();
+        const nameRegex = /^[A-Za-z\s]+$/;
+        const errorEl = this.closest('form').querySelector('[id$="fullNameError"]');
+        if (!value) {
+          errorEl.textContent = 'Full name is required';
+        } else if (!nameRegex.test(value)) {
+          errorEl.textContent = 'Invalid name (only alphabets and spaces allowed)';
+        } else {
+          errorEl.textContent = '';
+        }
+      });
+    });
+
+    document.querySelectorAll('input[id$="phone"]').forEach(input => {
+      input.addEventListener('input', function() {
+        const value = this.value.trim();
+        const phoneRegex = /^\d{10}$/;
+        const errorEl = this.closest('form').querySelector('[id$="phoneError"]');
+        if (!value) {
+          errorEl.textContent = 'Phone number is required';
+        } else if (!phoneRegex.test(value)) {
+          errorEl.textContent = 'Phone number must be 10 digits';
+        } else {
+          errorEl.textContent = '';
+        }
+      });
+    });
+
+    document.querySelectorAll('input[id$="email"]').forEach(input => {
+      input.addEventListener('input', function() {
+        const value = this.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const errorEl = this.closest('form').querySelector('[id$="emailError"]');
+        if (!value) {
+          errorEl.textContent = 'Email is required';
+        } else if (!emailRegex.test(value)) {
+          errorEl.textContent = 'Invalid email address';
+        } else {
+          errorEl.textContent = '';
+        }
+      });
+    });
+
+    // Attach consent checkbox handlers
+    document.querySelectorAll('input[id$="consent"]').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        formData.consent = this.checked;
+        const errorEl = this.closest('form').querySelector('[id$="consentError"]');
+        errorEl.textContent = this.checked ? '' : 'You must agree to the terms';
+      });
+    });
+  } catch (error) {
+    console.error('Error initializing forms:', error);
+  }
+});
+
+  </script>>
+
+    <script>
+        // Add this to your existing JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to handle popup open/close
+            function toggleBodyScroll(isOpen) {
+                document.body.classList.toggle('popup-open', isOpen);
+            }
+
+            // Add scroll lock when popup opens
+            const popups = document.querySelectorAll('.popup, .second-popup');
+            const popupOverlays = document.querySelectorAll('.popup-overlay, .second-popup-overlay');
+            
+            popups.forEach(popup => {
+                const closeBtn = popup.querySelector('.close-btn');
+                const overlay = document.getElementById(popup.id + '-overlay');
+                
+                // When popup is shown
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                            const isVisible = popup.style.display === 'block';
+                            toggleBodyScroll(isVisible);
+                        }
+                    });
+                });
+                
+                observer.observe(popup, { attributes: true });
+                
+                // Close button click
+                closeBtn.addEventListener('click', () => {
+                    toggleBodyScroll(false);
+                });
+                
+                // Overlay click
+                if (overlay) {
+                    overlay.addEventListener('click', () => {
+                        toggleBodyScroll(false);
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // ... existing script ...
+
+        // Initialize Select2 for hero form
+        $(document).ready(function() {
+            // Initialize hero form selects
+            $('#hero-state').select2({
+                data: indianStates.map(state => ({ id: state, text: state })),
+                placeholder: 'Select State'
+            });
+
+            $('#hero-segment').select2({
+                data: segments.map(segment => ({ id: segment.value, text: segment.label })),
+                placeholder: 'Select Segment'
+            });
+
+            $('#hero-investment').select2({
+                data: investments.map(investment => ({ id: investment.value, text: investment.label })),
+                placeholder: 'Select Investment Amount'
+            });
+
+            $('#hero-language').select2({
+                data: languages.map(language => ({ id: language.value, text: language.label })),
+                placeholder: 'Select Language'
+            });
+
+            // Add form submission handler for hero form
+            $('#hero-form').on('submit', function(e) {
+                e.preventDefault();
+                const formId = 'hero-form';
+                handleFormSubmit(formId, e);
+            });
+
+            // Add real-time validation for hero form
+            $('#hero-fullName').on('input', function() {
+                const value = this.value.trim();
+                const nameRegex = /^[A-Za-z\s]+$/;
+                const errorEl = $('#hero-fullNameError');
+                if (!value) {
+                    errorEl.text('Full name is required');
+                } else if (!nameRegex.test(value)) {
+                    errorEl.text('Invalid name (only alphabets and spaces allowed)');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            $('#hero-phone').on('input', function() {
+                const value = this.value.trim();
+                const phoneRegex = /^\d{10}$/;
+                const errorEl = $('#hero-phoneError');
+                if (!value) {
+                    errorEl.text('Phone number is required');
+                } else if (!phoneRegex.test(value)) {
+                    errorEl.text('Phone number must be 10 digits');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            $('#hero-email').on('input', function() {
+                const value = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const errorEl = $('#hero-emailError');
+                if (!value) {
+                    errorEl.text('Email is required');
+                } else if (!emailRegex.test(value)) {
+                    errorEl.text('Invalid email address');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            // Add change handlers for selects
+            $('#hero-state, #hero-segment, #hero-investment, #hero-language').on('change', function() {
+                const errorEl = $(`#${this.id}Error`);
+                errorEl.text($(this).val() ? '' : 'This field is required');
+            });
+
+            // Add consent checkbox handler
+            $('#hero-consent').on('change', function() {
+                const errorEl = $('#hero-consentError');
+                errorEl.text(this.checked ? '' : 'You must agree to the terms');
+            });
+        });
+    </script>
+
+    <script>
+        // ... existing script ...
+
+        // Initialize forms for Enquire Now and Try Now
+        $(document).ready(function() {
+            // Initialize Enquire Now form
+            $('#enquire-segment').select2({
+                data: segments.map(segment => ({ id: segment.value, text: segment.label })),
+                placeholder: 'Select Segment'
+            });
+
+            $('#enquire-language').select2({
+                data: languages.map(language => ({ id: language.value, text: language.label })),
+                placeholder: 'Select Language'
+            });
+
+            // Initialize Section form (Try Now)
+            $('#section-segment').select2({
+                data: segments.map(segment => ({ id: segment.value, text: segment.label })),
+                placeholder: 'Select Segment'
+            });
+
+            $('#section-language').select2({
+                data: languages.map(language => ({ id: language.value, text: language.label })),
+                placeholder: 'Select Language'
+            });
+
+            // Add form submission handlers
+            $('#enquire-form').on('submit', function(e) {
+                e.preventDefault();
+                const formId = 'enquire-form';
+                handleFormSubmit(formId, e);
+            });
+
+            $('#section-form').on('submit', function(e) {
+                e.preventDefault();
+                const formId = 'section-form';
+                handleFormSubmit(formId, e);
+            });
+
+            // Add real-time validation for Enquire Now form
+            $('#enquire-fullName').on('input', function() {
+                const value = this.value.trim();
+                const nameRegex = /^[A-Za-z\s]+$/;
+                const errorEl = $('#enquire-fullNameError');
+                if (!value) {
+                    errorEl.text('Full name is required');
+                } else if (!nameRegex.test(value)) {
+                    errorEl.text('Invalid name (only alphabets and spaces allowed)');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            $('#enquire-phone').on('input', function() {
+                const value = this.value.trim();
+                const phoneRegex = /^\d{10}$/;
+                const errorEl = $('#enquire-phoneError');
+                if (!value) {
+                    errorEl.text('Phone number is required');
+                } else if (!phoneRegex.test(value)) {
+                    errorEl.text('Phone number must be 10 digits');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            $('#enquire-email').on('input', function() {
+                const value = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const errorEl = $('#enquire-emailError');
+                if (!value) {
+                    errorEl.text('Email is required');
+                } else if (!emailRegex.test(value)) {
+                    errorEl.text('Invalid email address');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            // Add real-time validation for Section form
+            $('#section-fullName').on('input', function() {
+                const value = this.value.trim();
+                const nameRegex = /^[A-Za-z\s]+$/;
+                const errorEl = $('#section-fullNameError');
+                if (!value) {
+                    errorEl.text('Full name is required');
+                } else if (!nameRegex.test(value)) {
+                    errorEl.text('Invalid name (only alphabets and spaces allowed)');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            $('#section-phone').on('input', function() {
+                const value = this.value.trim();
+                const phoneRegex = /^\d{10}$/;
+                const errorEl = $('#section-phoneError');
+                if (!value) {
+                    errorEl.text('Phone number is required');
+                } else if (!phoneRegex.test(value)) {
+                    errorEl.text('Phone number must be 10 digits');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            $('#section-email').on('input', function() {
+                const value = this.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const errorEl = $('#section-emailError');
+                if (!value) {
+                    errorEl.text('Email is required');
+                } else if (!emailRegex.test(value)) {
+                    errorEl.text('Invalid email address');
+                } else {
+                    errorEl.text('');
+                }
+            });
+
+            // Add change handlers for selects
+            $('#enquire-segment, #enquire-language').on('change', function() {
+                const errorEl = $(`#${this.id}Error`);
+                errorEl.text($(this).val() ? '' : 'This field is required');
+            });
+
+            $('#section-segment, #section-language').on('change', function() {
+                const errorEl = $(`#${this.id}Error`);
+                errorEl.text($(this).val() ? '' : 'This field is required');
+            });
+
+            // Add consent checkbox handlers
+            $('#enquire-consent').on('change', function() {
+                const errorEl = $('#enquire-consentError');
+                errorEl.text(this.checked ? '' : 'You must agree to the terms');
+            });
+
+            $('#section-consent').on('change', function() {
+                const errorEl = $('#section-consentError');
+                errorEl.text(this.checked ? '' : 'You must agree to the terms');
+            });
+
+            // Update service card buttons to show section popup
+            $('.service-card button').on('click', function() {
+                const serviceName = $(this).closest('.service-card').find('h3').text();
+                $('#section-popup-heading').text(serviceName);
+                $('#section-popup').show();
+                $('#section-popup-overlay').show();
+            });
+        });
+    </script>
+
+    <script>
+        // ... existing script ...
+
+        // Initialize Select2 for popup form
+        $(document).ready(function() {
+            // Initialize popup form selects
+            $('#popup-state').select2({
+                data: indianStates.map(state => ({ id: state, text: state })),
+                placeholder: 'Select State'
+            });
+            $('#popup-segment').select2({
+                data: segments.map(segment => ({ id: segment.value, text: segment.label })),
+                placeholder: 'Select Segment'
+            });
+            $('#popup-investment').select2({
+                data: investments.map(investment => ({ id: investment.value, text: investment.label })),
+                placeholder: 'Select Investment Amount'
+            });
+            $('#popup-language').select2({
+                data: languages.map(language => ({ id: language.value, text: language.label })),
+                placeholder: 'Select Language'
+            });
+
+            // Open popup on all relevant button clicks
+            function openMainPopup(source, heading, desc) {
+                $('#popup-heading').text(heading || 'Special Offer!');
+                $('#popup-desc').text(desc || 'Sign up now and start maximizing profits with our premium stock advisory services!');
+                $('#popup-source').val(source || '');
+                $('#popup').show();
+                $('#popup-overlay').show();
+            }
+
+            // Enquire Now button
+            $(document).on('click', '.enquire-now button', function() {
+                openMainPopup('Enquire Now', 'Enquire Now', 'Fill out the form and our experts will get back to you!');
+            });
+            // Service card Try Now buttons
+            $(document).on('click', '.service-card button', function() {
+                const serviceName = $(this).closest('.service-card').find('h3').text();
+                openMainPopup(serviceName, serviceName, 'Fill out the form to get started with this package!');
+            });
+            // Still Not Sure section buttons
+            $(document).on('click', '.still-not-sure-card button', function() {
+                openMainPopup('Still Not Sure', 'Enquire Now', 'Fill out the form and our experts will help you choose the right plan!');
+            });
+            // Hero section submit button (replace form with button)
+            $(document).on('click', '#hero-form button[type="submit"]', function(e) {
+                e.preventDefault();
+                openMainPopup('Hero Section', 'Special Offer!', 'Sign up now and start maximizing profits with our premium stock advisory services!');
+            });
+
+            // Close popup
+            $('#close-popup, #popup-overlay').on('click', function() {
+                $('#popup').hide();
+                $('#popup-overlay').hide();
+            });
+
+            // Form validation and submission for popup form
+            $('#main-popup-form').on('submit', function(e) {
+                e.preventDefault();
+                // Validate fields (similar to previous logic, using popup-* IDs)
+                let errors = {};
+                const name = $('#popup-fullName').val().trim();
+                const phone = $('#popup-phone').val().trim();
+                const email = $('#popup-email').val().trim();
+                const state = $('#popup-state').val();
+                const segment = $('#popup-segment').val();
+                const investment = $('#popup-investment').val();
+                const language = $('#popup-language').val();
+                const consent = $('#popup-consent').is(':checked');
+                // Name
+                if (!name) errors.fullNameError = 'Full name is required';
+                else if (!/^[A-Za-z\s]+$/.test(name)) errors.fullNameError = 'Invalid name (only alphabets and spaces allowed)';
+                // Phone
+                if (!phone) errors.phoneError = 'Phone number is required';
+                else if (!/^\d{10}$/.test(phone)) errors.phoneError = 'Phone number must be 10 digits';
+                // Email
+                if (!email) errors.emailError = 'Email is required';
+                else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.emailError = 'Invalid email address';
+                // State
+                if (!state) errors.stateError = 'State is required';
+                // Segment
+                if (!segment) errors.segmentError = 'Segment is required';
+                // Investment
+                if (!investment) errors.investmentError = 'Investment amount is required';
+                // Language
+                if (!language) errors.languageError = 'Language is required';
+                // Consent
+                if (!consent) errors.consentError = 'You must agree to the terms';
+                // Show errors
+                $('#popup-fullNameError').text(errors.fullNameError || '');
+                $('#popup-phoneError').text(errors.phoneError || '');
+                $('#popup-emailError').text(errors.emailError || '');
+                $('#popup-stateError').text(errors.stateError || '');
+                $('#popup-segmentError').text(errors.segmentError || '');
+                $('#popup-investmentError').text(errors.investmentError || '');
+                $('#popup-languageError').text(errors.languageError || '');
+                $('#popup-consentError').text(errors.consentError || '');
+                if (Object.keys(errors).length > 0) return;
+                // Submit form (reuse your existing AJAX logic, update field names as needed)
+                const formData = {
+                    fullName: name,
+                    phone: phone,
+                    email: email,
+                    state: state,
+                    segment: segment,
+                    investment: investment,
+                    language: language,
+                    consent: consent,
+                    source: $('#popup-source').val(),
+                    ipAddress: '',
+                    utmSource: ''
+                };
+                // Get UTM
+                const params = new URLSearchParams(window.location.search);
+                formData.utmSource = params.get('utm') || '';
+                // Get IP
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => {
+                        formData.ipAddress = data.ip;
+                        submitPopupForm(formData);
+                    })
+                    .catch(() => submitPopupForm(formData));
+            });
+            function submitPopupForm(formData) {
+                const submitBtn = $('#main-popup-form button[type="submit"]');
+                const originalText = submitBtn.text();
+                submitBtn.text('Submitting...').prop('disabled', true);
+                fetch('https://twmresearchalert.com/subdomain/gateway/registrationget.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.text())
+                .then(data => {
+                    $('#main-popup-form .form-container').html(`
+                        <div class="max-w-md mx-auto p-10 text-center">
+                            <div class="bg-green-100 p-4 shadow-lg rounded-lg text-green-800">
+                                <h2 class="text-2xl font-semibold mb-4">Thank You!</h2>
+                                <p>You have successfully registered. <br /> We will get back to you soon.</p>
+                            </div>
+                        </div>
+                    `);
+                    window.location.href = 'https://twmresearchalert.com/thankyou/thankyou.html';
+                })
+                .catch(error => {
+                    submitBtn.text(originalText).prop('disabled', false);
+                    alert('Failed to submit form. Please try again.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
