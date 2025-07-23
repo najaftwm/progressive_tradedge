@@ -5,7 +5,7 @@ import PhoneInput from './PhoneInput';
 import OtpInput from './OtpInput';
 import UserDetails from './UserDetails';
 import KycComponent from './KycComponent';
-import Home from '../../screens/Home';
+
 
 // API endpoints
 const API_ENDPOINTS = {

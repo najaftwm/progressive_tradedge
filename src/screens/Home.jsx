@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import TopNav from '../components/topbar';
 import BottomNav from '../components/bottomnav';
 import KycComponent from '../components/Login/KycComponent';
 import refundFrame from '../images/refundframe1.png';
