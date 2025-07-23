@@ -5,6 +5,7 @@ import PhoneInput from './PhoneInput';
 import OtpInput from './OtpInput';
 import UserDetails from './UserDetails';
 import KycComponent from './KycComponent';
+import Home from '../../screens/Home';
 
 // API endpoints
 const API_ENDPOINTS = {
@@ -135,7 +136,7 @@ const OtpLogin = () => {
       if (data.success && data.statusCode === 201) {
         login(data.data); // Store token and session data
         setRegistrationComplete(true);
-        setShowKyc(true);
+        navigate('/home'); // Navigate to home after successful OTP verification
         return true;
       } else {
         throw new Error(data.messages?.[0] || 'OTP verification failed');
@@ -182,7 +183,7 @@ const OtpLogin = () => {
       if (data.success && data.statusCode === 201) {
         login(data.data); // Store token and session data
         setRegistrationComplete(true);
-        setShowKyc(true);
+        navigate('/home'); // Navigate to home after successful user details submission
         setShowUserDetails(false);
       } else {
         setUserDetailsError(data.message || 'Failed to create user');

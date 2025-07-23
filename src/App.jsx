@@ -130,10 +130,19 @@
 // };
 
 // export default App;
+// src/App.jsx
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+
 import OtpLogin from './components/Login/OtpLogin';
-import Home from './components/Home';
+import Layout from './components/Layout';
+
+import Home from './screens/Home';
+import Stocks from './screens/Stocks';
+import Trades from './screens/Trades';
+import Packs from './screens/Packs';
+import Refer from './screens/Refer';
+import Profile from './screens/Profile';
 
 function App() {
   return (
@@ -141,7 +150,16 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<OtpLogin />} />
-          <Route path="/home" element={<Home />} />
+
+          {/* Routes with BottomNav */}
+          <Route element={<Layout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/stocks" element={<Stocks />} />
+            <Route path="/trades" element={<Trades />} />
+            <Route path="/packs" element={<Packs />} />
+            <Route path="/refer" element={<Refer />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
@@ -149,3 +167,4 @@ function App() {
 }
 
 export default App;
+
