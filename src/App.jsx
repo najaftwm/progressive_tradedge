@@ -133,35 +133,41 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-
+import { StockProvider } from './context/StockContext';
 import OtpLogin from './components/Login/OtpLogin';
 import Layout from './components/Layout';
-
 import Home from './screens/Home';
 import Stocks from './screens/Stocks';
 import Trades from './screens/Trades';
 import Packs from './screens/Packs';
 import Refer from './screens/Refer';
 import Profile from './screens/Profile';
+import Tradedetails from './screens/TradeDetails';
+import BuyPackageOffer from './components/Home/BuyPackages';
+import PaymentResult from './components/PaymentResult';
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<OtpLogin />} />
-
-          {/* Routes with BottomNav */}
-          <Route element={<Layout />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/stocks" element={<Stocks />} />
-            <Route path="/trades" element={<Trades />} />
-            <Route path="/packs" element={<Packs />} />
-            <Route path="/refer" element={<Refer />} />
-            <Route path="/profile" element={<Profile />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <StockProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<OtpLogin />} />
+            {/* Routes with BottomNav */}
+            <Route element={<Layout />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/stocks" element={<Stocks />} />
+              <Route path="/trades" element={<Trades />} />
+              <Route path="/packs" element={<Packs />} />
+              <Route path="/refer" element={<Refer />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/Tradedetails" element={<Tradedetails />} />
+              <Route path="/BuyPackageOffer" element={<BuyPackageOffer />} />
+              <Route path="/paymentResult" element={<PaymentResult />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </StockProvider>
     </AuthProvider>
   );
 }

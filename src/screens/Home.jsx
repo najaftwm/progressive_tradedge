@@ -4,11 +4,27 @@ import { AuthContext } from '../context/AuthContext';
 import BottomNav from '../components/bottomnav';
 import KycComponent from '../components/Login/KycComponent';
 import refundFrame from '../images/refundframe1.png';
+import { useStockContext } from '../context/StockContext';
+import ExplorePackageCard from '../components/Home/explorePackageCard';
+import TradeCard from '../components/Home/TradeCard';
 
 export default function Home() {
   const navigate = useNavigate();
   const { isInitializing, isLoggedIn, userDetails } = useContext(AuthContext);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const { packages } = useStockContext();
+
+  const explorePackagesId = ['5', '3', '10', '9'];
+  const bestTradesId = ['2', '4', '11', '9'];
+
+  const explorePackages = packages.filter(pkg => explorePackagesId.includes(pkg.package_id));
+  const bestTrades = packages.filter(pkg => bestTradesId.includes(pkg.package_id));
+const { authData, kycStatus } = useContext(AuthContext);
+
+  // Directly check if KYC is completed (status 'Y')
+  const isKycCompleted = kycStatus === 'Y' || authData?.auth === 'Y';
+
+
 
   const sendTestNotification = () => {
     if ('Notification' in window) {
@@ -22,7 +38,9 @@ export default function Home() {
       });
     }
   };
-
+ console.log('All packages:', packages);
+console.log('Explore packages:', explorePackages);
+console.log('Best trades:', bestTrades);
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Optional: Top Navigation */}
@@ -30,11 +48,15 @@ export default function Home() {
 
       <main className="flex-1 p-4 mt-14 mb-16">
         <div className="max-w-2xl mx-auto space-y-6">
-          {/* KYC Section */}
-          <KycComponent />
+         {/* Render KYC component ONLY if KYC is NOT completed */}
+          {!isKycCompleted && (
+            <div className="mx-2">
+              <KycComponent />
+            </div>
+          )}
           <div className="mx-3 mt-2 bg-transparent">
       <div
-        onClick={() => navigate('/main/TradeDetails?package_id=10000')}
+        onClick={() => navigate('/TradeDetails?package_id=10000')}
         className="cursor-pointer rounded-lg overflow-hidden shadow-md transition-transform hover:scale-105"
       >
         <div
@@ -65,19 +87,49 @@ export default function Home() {
         </div>
         </div>
 
+        {/* Explore Packages */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Explore Packages</h2>
+        <div className="flex overflow-x-auto gap-4">
+          {explorePackages.map((item) => (
+            <ExplorePackageCard key={item.package_id} item={item} />
+          ))}
+          <div
+            onClick={() => navigate('/trades')}
+            className="min-w-[200px] flex-shrink-0 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-primary hover:bg-gray-100 transition"
+          >
+            <span className="text-blue-600 font-medium">See More →</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Best Trades */}
+      <div className="bg-gradient-to-r from-green-800 to-emerald-400 text-white p-6  rounded-xl shadow-lg">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">Best Trades</h2>
+          <div className="flex items-center gap-  2">
+            <svg className="w-5 h-5 text-lime-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" fill="none" />
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+            </svg>
+            <span className="font-semibold">SEBI Reg</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2  sm:grid-cols-2 gap-4">
+         {bestTrades.map((item) => (
+        <TradeCard key={item.package_id} item={item} />
+      ))}
+        </div>
+      </div>
+
         </div>
       </main>
 
       {/* Bottom Navigation */}
       <BottomNav />
 
-      {/* Floating Test Notification Button */}
-      <button
-        onClick={sendTestNotification}
-        className="fixed bottom-20 right-4 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition"
-      >
-        Test Notification
-      </button>
+     
 
       {/* Popup */}
       {isPopupVisible && (
