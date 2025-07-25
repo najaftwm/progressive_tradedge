@@ -13,7 +13,7 @@ export default function Header({ showBuyProButton = false, showLogoutButton = fa
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/otp', { replace: true });
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Logout failed:', error);
       // Optionally show some error UI here

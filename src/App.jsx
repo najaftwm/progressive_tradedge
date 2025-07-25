@@ -145,6 +145,9 @@ import Profile from './screens/Profile';
 import Tradedetails from './screens/TradeDetails';
 import BuyPackageOffer from './components/Home/BuyPackages';
 import PaymentResult from './components/PaymentResult';
+import TradeDetailedCard from './components/Home/Tradedetailedcard';
+import PackagesScreen from './screens/main/buy-packages';
+import TransactionHistoryPage from './components/TransactionHistory';
 
 function App() {
   return (
@@ -164,6 +167,9 @@ function App() {
               <Route path="/Tradedetails" element={<Tradedetails />} />
               <Route path="/BuyPackageOffer" element={<BuyPackageOffer />} />
               <Route path="/paymentResult" element={<PaymentResult />} />
+              <Route path="/main/TradeDetailedCard" element={<TradeDetailedCard />} />
+              <Route path="/user_package" element={<PackagesScreen />} />
+              <Route path="/transactions-history" element={<TransactionHistoryPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
