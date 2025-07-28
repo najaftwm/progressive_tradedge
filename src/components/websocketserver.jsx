@@ -26,11 +26,10 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
   };
 
   useEffect(() => {
-    
-
     const fetchTrades = async () => {
       try {
         const authToken = authData?.access_token || 'your-auth-token';
+        console.log('TradeNotifications.jsx - Fetching trades with token:', authToken ? 'Present' : 'Absent');
 
         const response = await fetch('https://gateway.twmresearchalert.com/trades?type=all', {
           method: 'GET',
@@ -41,30 +40,35 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
         });
 
         const raw = await response.json();
-        
-        
+        console.log('TradeNotifications.jsx - Trades API response:', raw);
+        // Log first trade to inspect fields
+        if (raw.data?.length > 0) {
+          console.log('TradeNotifications.jsx - First trade sample:', raw.data[0]);
+        }
+
         let trades = [];
         if (Array.isArray(raw)) {
-          
           trades = raw;
         } else if (Array.isArray(raw?.data)) {
           trades = raw.data;
         } else if (Array.isArray(raw?.trades)) {
           trades = raw.trades;
         } else {
-          console.error('❌ No valid array found in API response:', raw);
+          console.error('TradeNotifications.jsx - No valid array found in API response:', raw);
           return;
         }
-        
+
         const formattedTrades = trades.map((t) => {
           const parsedDate = new Date(t.created_at || Date.now());
+          // Try alternative field names for package_subtypes
+          const packageSubtypes = t.package_subtypes || t.package_ids || t.subtypes || [];
           return {
             id: String(t.trade_id),
-            stockSymbol: t.stock_symbol,
+            stock_symbol: t.stock_symbol,
             stockName: t.stock_symbol,
             entryPrice: Number(t.entry_price || 0),
-            targetPrice: Number(t.target_price),
-            stopLoss: Number(t.stop_loss || 0),
+            target_price: Number(t.target_price),
+            stop_loss: Number(t.stop_loss || 0),
             timeFrame: t.time_frame || '1 Week',
             prediction: {
               type: t.trade_type === 'buy' ? 'bullish' : 'bearish',
@@ -73,11 +77,16 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
               potentialLoss: Number(t.potential_loss || 2),
             },
             analysis: t.description || '',
-            riskLevel: t.risk_level || 'Medium',
+            risk_level: t.risk_level || 'Medium',
             recommendedInvestment: Number(t.recommended_investment || 50000),
             timestamp: parsedDate.toISOString(),
+            trade_date: parsedDate.toISOString(),
+            trade_type: t.trade_type.toUpperCase(),
+            package_subtype_ids: packageSubtypes?.map(String) || [],
           };
         });
+
+        console.log('TradeNotifications.jsx - Formatted Trades:', formattedTrades);
 
         const isSameDay = (date1, date2) =>
           date1.getFullYear() === date2.getFullYear() &&
@@ -86,17 +95,18 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
 
         const today = new Date();
         const todaysTrades = formattedTrades.filter((trade) =>
-          isSameDay(new Date(trade.timestamp), today)
+          isSameDay(new Date(trade.trade_date), today)
         );
 
         setTodaysTrades(todaysTrades);
         setAllTrades(formattedTrades);
 
         if (typeof onUpdateTradeLists === "function") {
+          console.log('TradeNotifications.jsx - Updating trade lists:', { todaysTrades, allTrades: formattedTrades });
           onUpdateTradeLists(todaysTrades, formattedTrades);
         }
       } catch (error) {
-        console.error('❌ Failed to fetch trades:', error);
+        console.error('TradeNotifications.jsx - Failed to fetch trades:', error);
       }
     };
 
@@ -104,29 +114,14 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
   }, [authData, onUpdateTradeLists]);
 
   const handleNewTradeNotification = useCallback(async (data) => {
-    const tradeSubtypeIds = data.package_subtypes?.map(String) || [];
-    const now = new Date();
-
-    const validUserPackageIds = authData?.userTransactions
-      ?.filter((txn) => {
-        const expiry = new Date(txn.purchase_info?.expiry_date);
-        return txn.purchase_info?.status === 'active' && expiry > now;
-      })
-      .map((txn) => String(txn.package_details?.subtype_id));
-
-    const hasAccess = tradeSubtypeIds.some((id) => validUserPackageIds?.includes(id));
-    if (!hasAccess) {
-      console.log('❌ Skipped. User doesn’t have valid package for this trade.');
-      return;
-    }
-
+    console.log('TradeNotifications.jsx - New trade notification:', data);
     const formattedTrade = {
       id: String(data.trade_id),
-      stockSymbol: data.stock_symbol,
+      stock_symbol: data.stock_symbol,
       stockName: data.stock_symbol,
       entryPrice: Number(data.entry_price || 0),
-      targetPrice: Number(data.target_price || 0),
-      stopLoss: Number(data.stop_loss || 0),
+      target_price: Number(data.target_price || 0),
+      stop_loss: Number(data.stop_loss || 0),
       timeFrame: data.time_frame || '1 Week',
       prediction: {
         type: data.trade_type === 'buy' ? 'bullish' : 'bearish',
@@ -135,16 +130,30 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
         potentialLoss: Number(data.potential_loss || 2),
       },
       analysis: data.message || '',
-      riskLevel: data.risk_level || 'Medium',
+      risk_level: data.risk_level || 'Medium',
       recommendedInvestment: Number(data.recommended_investment || 50000),
       timestamp: data.timestamp || new Date().toISOString(),
+      trade_date: data.timestamp || new Date().toISOString(),
+      trade_type: data.trade_type.toUpperCase(),
+      package_subtype_ids: (data.package_subtypes || data.package_ids || data.subtypes || [])?.map(String) || [],
     };
+
+    console.log('TradeNotifications.jsx - Formatted trade:', formattedTrade);
 
     if (!liveTradeIds.has(formattedTrade.id)) {
       addLiveTrade?.(formattedTrade);
       onNewTradeTip?.(formattedTrade);
       setFetchedTrades((prev) => [formattedTrade, ...prev]);
       setLiveTradeIds((prev) => new Set(prev).add(formattedTrade.id));
+      setTodaysTrades((prev) => isToday(formattedTrade.trade_date) ? [formattedTrade, ...prev] : prev);
+      setAllTrades((prev) => [formattedTrade, ...prev]);
+      if (typeof onUpdateTradeLists === "function") {
+        console.log('TradeNotifications.jsx - Updating trade lists with new trade:', formattedTrade);
+        onUpdateTradeLists(
+          isToday(formattedTrade.trade_date) ? [formattedTrade, ...todaysTrades] : todaysTrades,
+          [formattedTrade, ...allTrades]
+        );
+      }
     }
 
     const notification = {
@@ -164,12 +173,12 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
     });
 
     const packageInfo =
-      data.package_subtypes?.length > 0
-        ? `Packages: ${data.package_subtypes.join(', ')}`
+      (data.package_subtypes || data.package_ids || data.subtypes)?.length > 0
+        ? `Packages: ${(data.package_subtypes || data.package_ids || data.subtypes).join(', ')}`
         : '';
 
     if (Notification.permission === 'granted') {
-      new Notification(`📈 ${data.stock_symbol} Trade Alert (${data.trade_type.toUpperCase()})`, {
+      new Notification(`${data.stock_symbol} Trade Alert (${data.trade_type.toUpperCase()})`, {
         body: `Target: ₹${data.target_price} • ${packageInfo}`,
         data: {
           screen: 'TradeDetailedCard',
@@ -188,17 +197,18 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
     const rawPhone = phoneNumber || (authData?.userTransactions?.length ? authData.userTransactions[0]?.user?.whatsapp_number : '');
     const cleanedPhone = cleanPhoneNumber(rawPhone);
 
-    console.log("📱 Raw:", rawPhone, "| Cleaned:", cleanedPhone);
+    console.log("TradeNotifications.jsx - Raw phone:", rawPhone, "| Cleaned:", cleanedPhone);
 
     if (cleanedPhone) {
       await sendTradeWhatsAppMessage(formattedTrade, cleanedPhone);
     } else {
-      console.warn("⚠️ Invalid phone number:", rawPhone);
-      alert(`❌ Cannot send WhatsApp. Invalid: ${rawPhone}`);
+      console.warn("TradeNotifications.jsx - Invalid phone number:", rawPhone);
+      alert(`Cannot send WhatsApp. Invalid: ${rawPhone}`);
     }
-  }, [authData, liveTradeIds, addLiveTrade, onNewTradeTip, phoneNumber]);
+  }, [authData, liveTradeIds, addLiveTrade, onNewTradeTip, phoneNumber, todaysTrades, allTrades, onUpdateTradeLists]);
 
   const handleFollowupNotification = useCallback((data) => {
+    console.log('TradeNotifications.jsx - Follow-up notification:', data);
     const notification = {
       id: `followup_${data.id}_${Date.now()}`,
       type: 'followup',
@@ -216,6 +226,7 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
   }, []);
 
   const handlePendingFollowups = useCallback((data) => {
+    console.log('TradeNotifications.jsx - Pending follow-ups:', data);
     if (data.count > 0) {
       alert(`Pending Follow-ups: You have ${data.count} pending follow-ups`);
     }
@@ -227,12 +238,12 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
 
     pusher.connection.bind('connected', () => {
       setIsConnected(true);
-      console.log('✅ Connected to Pusher');
+      console.log('TradeNotifications.jsx - Connected to Pusher');
     });
 
     pusher.connection.bind('disconnected', () => {
       setIsConnected(false);
-      console.log('⚠️ Disconnected from Pusher');
+      console.log('TradeNotifications.jsx - Disconnected from Pusher');
     });
 
     channel.bind('new-trade-notification', handleNewTradeNotification);
@@ -264,10 +275,10 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
   };
 
   const sendTradeWhatsAppMessage = async (trade, phoneNumber) => {
-    console.log("📞 Cleaned phone number:", phoneNumber);
-    console.log("📨 Message payload:", {
-      stock: trade.stockSymbol,
-      target: trade.targetPrice,
+    console.log("TradeNotifications.jsx - Cleaned phone number:", phoneNumber);
+    console.log("TradeNotifications.jsx - Message payload:", {
+      stock: trade.stock_symbol,
+      target: trade.target_price,
       type: trade.prediction?.type,
     });
 
@@ -280,8 +291,8 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
         templateid: '1207184657851670',
         parameters: {
           body: [
-            { type: 'text', text: trade.stockSymbol },
-            { type: 'text', text: `${trade.targetPrice}` },
+            { type: 'text', text: trade.stock_symbol },
+            { type: 'text', text: `${trade.target_price}` },
             { type: 'text', text: `${trade.prediction?.type}` },
           ],
         },
@@ -297,19 +308,19 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
       });
 
       const result = await response.json();
-      console.log("📦 WhatsApp API Response:", result);
+      console.log("TradeNotifications.jsx - WhatsApp API Response:", result);
 
       if (response.ok && result.status) {
-        alert(`✅ WhatsApp message sent to ${phoneNumber}`);
+        alert(`WhatsApp message sent to ${phoneNumber}`);
         return true;
       } else {
-        console.error('❌ WhatsApp message failed:', result);
-        alert(`❌ WhatsApp failed: ${result?.message || 'Unknown error'}`);
+        console.error('TradeNotifications.jsx - WhatsApp message failed:', result);
+        alert(`WhatsApp failed: ${result?.message || 'Unknown error'}`);
         return false;
       }
     } catch (error) {
-      console.error('❌ Error sending WhatsApp message:', error);
-      alert('⚠️ Error sending WhatsApp confirmation.');
+      console.error('TradeNotifications.jsx - Error sending WhatsApp message:', error);
+      alert('Error sending WhatsApp confirmation.');
       return false;
     }
   };
@@ -319,15 +330,15 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
   const renderTradeCard = ({ item }) => (
     <div className="bg-white p-4 mb-3 rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-base font-semibold text-gray-800">{item.stockSymbol}</h3>
-        <span className="text-xs text-gray-600">{formatTimestamp(item.timestamp)}</span>
+        <h3 className="text-base font-semibold text-gray-800">{item.stock_symbol}</h3>
+        <span className="text-xs text-gray-600">{formatTimestamp(item.trade_date)}</span>
       </div>
       <p className="text-sm text-gray-600 mb-2">{item.analysis}</p>
       <div className="bg-gray-50 p-3 rounded-md">
-        <p className="text-xs text-gray-600 mb-1">Target Price: ₹{item.targetPrice}</p>
-        <p className="text-xs text-gray-600 mb-1">Stop Loss: ₹{item.stopLoss}</p>
+        <p className="text-xs text-gray-600 mb-1">Target Price: ₹{item.target_price}</p>
+        <p className="text-xs text-gray-600 mb-1">Stop Loss: ₹{item.stop_loss}</p>
         <p className="text-xs text-gray-600 mb-1">Prediction: {item.prediction?.type}</p>
-        <p className="text-xs text-gray-600">Risk Level: {item.riskLevel}</p>
+        <p className="text-xs text-gray-600">Risk Level: {item.risk_level}</p>
       </div>
     </div>
   );

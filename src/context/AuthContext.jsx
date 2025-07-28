@@ -31,9 +31,8 @@ export const AuthProvider = ({ children }) => {
   const [transactionsError, setTransactionsError] = useState('');
   const [purchasedPackagesId, setPurchasedPackagesId] = useState([]);
 
-  // Log all user details whenever they update
   useEffect(() => {
-    console.log('🔄 User Data Updated - Timestamp:', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
+    console.log('User Data Updated - Timestamp:', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
     console.table({
       'Auth Data': {
         UserID: authData.user_id,
@@ -55,15 +54,17 @@ export const AuthProvider = ({ children }) => {
     });
   }, [authData, userDetails, userTransactions, purchasedPackagesId, kycStatus]);
 
-  // Load auth data and fetch all user details on mount
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         const storedData = localStorage.getItem('authData');
+        const storedPackages = localStorage.getItem('purchasedPackagesId');
         const parsedData = storedData ? JSON.parse(storedData) : null;
-        console.log('📥 Initializing AuthProvider - Stored authData from localStorage:', parsedData || 'None');
+        const parsedPackages = storedPackages ? JSON.parse(storedPackages) : [];
+        console.log('Initializing AuthProvider - Stored authData:', parsedData || 'None', 'Stored purchasedPackagesId:', parsedPackages);
         if (!parsedData?.user_id) {
-          console.warn('⚠️ No user_id found in localStorage, skipping data fetch');
+          console.warn('No user_id found in localStorage, skipping data fetch');
+          setPurchasedPackagesId(parsedPackages);
           setIsInitializing(false);
           return;
         }
@@ -72,7 +73,8 @@ export const AuthProvider = ({ children }) => {
           ...parsedData,
           isAuthenticated: isTokenValid,
         });
-        console.log('👤 User data after initialization:', {
+        setPurchasedPackagesId(parsedPackages);
+        console.log('User data after initialization:', {
           ...parsedData,
           isAuthenticated: isTokenValid,
         });
@@ -80,37 +82,36 @@ export const AuthProvider = ({ children }) => {
           const numericUserId = parsedData.user_id.replace('LNUSR', '');
           await Promise.all([
             fetchUserDetails(numericUserId),
-            fetchUserTransactions(numericUserId),
+            fetchUserTransactions(numericUserId, true),
             fetchKycStatus(numericUserId),
           ]);
         } else {
-          console.warn('⚠️ Invalid or expired token, skipping data fetch');
+          console.warn('Invalid or expired token, skipping data fetch');
         }
       } catch (error) {
-        console.error('❌ Error checking login status:', error);
+        console.error('Error checking login status:', error);
       } finally {
         setIsInitializing(false);
-        console.log('✅ AuthProvider initialization complete - isInitializing:', false);
+        console.log('AuthProvider initialization complete - isInitializing:', false);
       }
     };
     checkLoginStatus();
   }, []);
 
-  // Fetch user details
   const fetchUserDetails = useCallback(async (userId) => {
     if (!userId) {
-      console.warn('⚠️ fetchUserDetails - No userId provided');
+      console.warn('fetchUserDetails - No userId provided');
       return;
     }
     setUserDetailsLoading(true);
     setUserDetailsError('');
     try {
-      console.log('🔍 Fetching user details for userId:', userId, 'with token:', authData.access_token ? 'Present' : 'Absent');
+      console.log('Fetching user details for userId:', userId, 'with token:', authData.access_token ? 'Present' : 'Absent');
       const numericUserId = userId.replace('LNUSR', '');
       const response = await axios.get(`https://gateway.twmresearchalert.com/kyc?user_id=${numericUserId}`, {
         headers: { Authorization: `Bearer ${authData.access_token}` || '' },
       });
-      console.log('📡 fetchUserDetails - Full API response:', response.data);
+      console.log('fetchUserDetails - Full API response:', response.data);
       if (response.data.status === 'success') {
         const details = response.data.data;
         setUserDetails(details);
@@ -125,116 +126,153 @@ export const AuthProvider = ({ children }) => {
             auth: details.auth,
           };
           localStorage.setItem('authData', JSON.stringify(updatedData));
-          console.log('📝 fetchUserDetails - Fetched user details:', details);
+          console.log('fetchUserDetails - Fetched user details:', details);
           return updatedData;
         });
       } else {
         setUserDetailsError(response.data.message || 'Failed to fetch user details');
-        console.log('⚠️ fetchUserDetails - Error message:', response.data.message);
+        console.log('fetchUserDetails - Error message:', response.data.message);
       }
     } catch (error) {
       setUserDetailsError(error.response?.data?.message || error.message || 'An error occurred while fetching user details');
-      console.error('❌ fetchUserDetails - Full Error:', error.response || error);
+      console.error('fetchUserDetails - Full Error:', error.response || error);
     } finally {
       setUserDetailsLoading(false);
-      console.log('✅ fetchUserDetails - Completed, userDetailsLoading:', false);
+      console.log('fetchUserDetails - Completed, userDetailsLoading:', false);
     }
   }, [authData]);
 
-  // Fetch KYC status
   const fetchKycStatus = useCallback(async (userId = authData.user_id) => {
     if (!userId) {
-      console.warn('⚠️ fetchKycStatus - No userId provided, skipping KYC fetch');
+      console.warn('fetchKycStatus - No userId provided, skipping KYC fetch');
       return null;
     }
     setKycLoading(true);
     setKycError('');
     try {
-      console.log('🔍 fetchKycStatus - Fetching KYC for userId:', userId);
+      console.log('fetchKycStatus - Fetching KYC for userId:', userId);
       const numericUserId = userId.replace('LNUSR', '');
       const response = await axios.get(`https://gateway.twmresearchalert.com/kyc?user_id=${numericUserId}`, {
         headers: { Authorization: `Bearer ${authData.access_token}` || '' },
       });
       if (response.data.status === 'success') {
         setKycStatus(response.data.data.auth);
-        console.log('📝 fetchKycStatus - Updated kycStatus:', response.data.data.auth);
+        console.log('fetchKycStatus - Updated kycStatus:', response.data.data.auth);
         return response.data.data.auth;
       } else {
         throw new Error(response.data.message || 'Failed to fetch KYC status');
       }
     } catch (error) {
       setKycError(error.response?.data?.message || error.message || 'An error occurred while fetching KYC status');
-      console.error('❌ fetchKycStatus - Full Error:', error.response || error);
+      console.error('fetchKycStatus - Full Error:', error.response || error);
       throw error;
     } finally {
       setKycLoading(false);
-      console.log('✅ fetchKycStatus - Completed, kycLoading:', false);
+      console.log('fetchKycStatus - Completed, kycLoading:', false);
     }
   }, [authData]);
 
-  // Fetch user transactions
-  const fetchUserTransactions = useCallback(async (userId) => {
+  const fetchUserTransactions = useCallback(async (userId, forceRefresh = false) => {
     if (!userId) {
-      console.warn('⚠️ fetchUserTransactions - No userId provided');
+      console.warn('fetchUserTransactions - No userId provided');
       return;
+    }
+    const cacheKey = 'purchasedPackagesId';
+    const cacheTimeKey = 'purchasedPackagesTime';
+    if (!forceRefresh) {
+      try {
+        const cachedPackages = localStorage.getItem(cacheKey);
+        const cachedTime = localStorage.getItem(cacheTimeKey);
+        if (cachedPackages && cachedTime && Date.now() - parseInt(cachedTime) < 5 * 60 * 1000) {
+          setPurchasedPackagesId(JSON.parse(cachedPackages));
+          console.log('fetchUserTransactions - Using cached purchasedPackagesId:', JSON.parse(cachedPackages));
+          return;
+        }
+      } catch {}
     }
     setTransactionsLoading(true);
     setTransactionsError('');
-    try {
-      console.log('🔍 Fetching user transactions for userId:', userId);
-      const numericUserId = userId.replace('LNUSR', '');
-      const response = await axios.get(
-        `https://tradedge-server.onrender.com/api/userTransactionsById?user_id=${numericUserId}`,
-        {
-          headers: { Authorization: `Bearer ${authData.access_token}` || '' },
+    let attempts = 0;
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 1000;
+    while (attempts < MAX_RETRIES) {
+      try {
+        console.log('Fetching user transactions for userId:', userId, 'Attempt:', attempts + 1);
+        const numericUserId = userId.replace('LNUSR', '');
+        const response = await axios.get(
+          `https://tradedge-server.onrender.com/api/userTransactionsById?user_id=${numericUserId}`,
+          {
+            headers: { Authorization: `Bearer ${authData.access_token}` || '' },
+          }
+        );
+        console.log('fetchUserTransactions - Raw API Response:', response.data);
+        if (response.data.transactions?.status === 'success') {
+          const packages = response.data.transactions.data.packages || [];
+          console.log('Parsed Packages:', packages);
+          if (!Array.isArray(packages)) {
+            console.warn('fetchUserTransactions - Packages is not an array:', packages);
+            setUserTransactions([]);
+            setPurchasedPackagesId([]);
+            localStorage.setItem(cacheKey, JSON.stringify([]));
+            localStorage.setItem(cacheTimeKey, Date.now().toString());
+            return;
+          }
+          const packageIds = packages
+            .filter(
+              (pkg) =>
+                pkg?.payment_history?.[0]?.amount &&
+                parseFloat(pkg.payment_history[0].amount) === parseFloat(pkg.package_details?.package_price) &&
+                pkg.payment_history[0]?.payment_status === 'completed' &&
+                pkg.package_details?.subtype_id
+            )
+            .map((pkg) => pkg.package_details.subtype_id)
+            .filter(Boolean);
+          console.log('Completed Package IDs:', packageIds);
+          setUserTransactions(packages);
+          setPurchasedPackagesId(packageIds);
+          localStorage.setItem(cacheKey, JSON.stringify(packageIds));
+          localStorage.setItem(cacheTimeKey, Date.now().toString());
+          console.log('Transactions fetched successfully - Count:', packages.length);
+          return;
+        } else {
+          throw new Error(response.data.message || 'Failed to fetch transactions');
         }
-      );
-      console.log('📦 fetchUserTransactions - Raw API Response:', response.data);
-      if (response.data.transactions?.status === 'success') {
-        const packages = response.data.transactions.data.packages || [];
-        console.log('📦 Parsed Packages:', packages);
-        if (!Array.isArray(packages)) {
-          console.warn('⚠️ fetchUserTransactions - Packages is not an array:', packages);
+      } catch (error) {
+        attempts++;
+        if (attempts === MAX_RETRIES) {
+          setTransactionsError(error.response?.data?.message || error.message || 'An error occurred while fetching transactions');
+          console.error('fetchUserTransactions - Full Error:', error.response || error);
           setUserTransactions([]);
           setPurchasedPackagesId([]);
-          return;
+          localStorage.setItem(cacheKey, JSON.stringify([]));
+          localStorage.setItem(cacheTimeKey, Date.now().toString());
+          break;
         }
-        const packageIds = packages
-          .filter(
-            (pkg) =>
-              pkg?.payment_history?.[0]?.amount &&
-              parseFloat(pkg.payment_history[0].amount) === parseFloat(pkg.package_details?.package_price) &&
-              pkg.payment_history[0]?.payment_status === 'completed'
-          )
-          .map((pkg) => pkg.package_details?.subtype_id)
-          .filter(Boolean);
-        console.log('✅ Completed Package IDs:', packageIds);
-        setUserTransactions(packages);
-        setPurchasedPackagesId(packageIds);
-        console.log('✅ Transactions fetched successfully - Count:', packages.length);
-      } else {
-        setTransactionsError(response.data.message || 'Failed to fetch transactions');
-        console.warn('⚠️ fetchUserTransactions - API responded with failure:', response.data.message);
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempts));
+      } finally {
+        setTransactionsLoading(false);
+        console.log('fetchUserTransactions - Finished loading, transactionsLoading:', false);
       }
-    } catch (error) {
-      setTransactionsError(error.response?.data?.message || error.message || 'An error occurred while fetching transactions');
-      console.error('❌ fetchUserTransactions - Full Error:', error.response || error);
-      setUserTransactions([]);
-      setPurchasedPackagesId([]);
-    } finally {
-      setTransactionsLoading(false);
-      console.log('✅ fetchUserTransactions - Finished loading, transactionsLoading:', false);
     }
   }, [authData.access_token]);
 
-  // Send KYC confirmation email
+  useEffect(() => {
+    if (!authData.user_id || !authData.isAuthenticated) return;
+    const numericUserId = authData.user_id.replace('LNUSR', '');
+    const interval = setInterval(() => {
+      console.log('Refreshing purchased packages for userId:', numericUserId);
+      fetchUserTransactions(numericUserId, true);
+    }, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [authData.user_id, authData.isAuthenticated, fetchUserTransactions]);
+
   const sendKycConfirmationMail = useCallback(async (userId, status) => {
     if (!authData.user_email_id) {
-      console.warn('⚠️ sendKycConfirmationMail - Email missing for KYC notification');
+      console.warn('sendKycConfirmationMail - Email missing for KYC notification');
       return;
     }
     try {
-      console.log('📧 sendKycConfirmationMail - Sending email for userId:', userId, 'status:', status);
+      console.log('sendKycConfirmationMail - Sending email for userId:', userId, 'status:', status);
       const response = await axios.post('http://gateway.twmresearchalert.com?url=sendkycmail', {
         email: authData.user_email_id,
         type: 'kyc',
@@ -245,13 +283,12 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${authData.access_token}`,
         },
       });
-      console.log('📬 sendKycConfirmationMail - KYC email response:', response.data);
+      console.log('sendKycConfirmationMail - KYC email response:', response.data);
     } catch (error) {
-      console.error('❌ sendKycConfirmationMail - Error:', error.response || error);
+      console.error('sendKycConfirmationMail - Error:', error.response || error);
     }
   }, [authData]);
 
-  // Handle login
   const login = useCallback((data) => {
     const newAuthData = {
       user_id: data.user_id,
@@ -270,7 +307,7 @@ export const AuthProvider = ({ children }) => {
     };
     setAuthData(newAuthData);
     localStorage.setItem('authData', JSON.stringify(newAuthData));
-    console.log('🎉 User logged in successfully - Timestamp:', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
+    console.log('User logged in successfully - Timestamp:', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
     console.table({
       UserID: newAuthData.user_id,
       Name: newAuthData.user_name,
@@ -286,13 +323,12 @@ export const AuthProvider = ({ children }) => {
     });
     const numericUserId = newAuthData.user_id.replace('LNUSR', '');
     fetchUserDetails(numericUserId);
-    fetchUserTransactions(numericUserId);
+    fetchUserTransactions(numericUserId, true);
     fetchKycStatus(numericUserId);
   }, [fetchUserDetails, fetchUserTransactions, fetchKycStatus]);
 
-  // Handle logout
   const logout = useCallback(() => {
-    console.log('🔚 logout - Clearing authData and localStorage - Timestamp:', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
+    console.log('logout - Clearing authData and localStorage - Timestamp:', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
     setAuthData({
       user_id: null,
       user_name: null,
@@ -313,7 +349,9 @@ export const AuthProvider = ({ children }) => {
     setUserTransactions([]);
     setPurchasedPackagesId([]);
     localStorage.removeItem('authData');
-    console.log('🗑️ logout - localStorage authData removed');
+    localStorage.removeItem('purchasedPackagesId');
+    localStorage.removeItem('purchasedPackagesTime');
+    console.log('logout - localStorage cleared');
   }, []);
 
   const value = useMemo(() => ({

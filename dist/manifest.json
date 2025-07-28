@@ -1,0 +1,23 @@
+{
+  "name": "Tradedge Web App",
+  "short_name": "Tradedge",
+  "description": "Trading website",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#ffcbe4",
+  "background_color": "#fa99ca",
+  "icons": [
+    {
+      "src": "/icons/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useStockContext } from '../context/StockContext'; // ✅ Correct usage of custom context
+import { useStockContext } from '../context/StockContext';
+import { useAuth } from '../context/AuthContext'; // Added import
 
 // Heroicons
 import {
@@ -16,12 +17,43 @@ export default function Tradedetails() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { packages } = useStockContext();
+  const { purchasedPackagesId, userTransactions } = useAuth(); // Added useAuth
   const [isRedirecting, setIsRedirecting] = useState(false);
   const package_id = searchParams.get('package_id');
   const [trade, setTrade] = useState(null);
 
-  // ✅ Simulated: Replace with real AuthContext if needed
-  const purchasedPackagesId = [];
+  // Check if package is purchased and not expired
+  const isPackageSubscribed = useCallback(() => {
+    if (!package_id) {
+      console.warn('No package_id provided in search params');
+      return false;
+    }
+    if (!purchasedPackagesId.includes(package_id)) {
+      console.log(`Package ${package_id} not in purchasedPackagesId:`, purchasedPackagesId);
+      return false;
+    }
+    const transaction = userTransactions.find(tx => tx.package_details?.subtype_id === package_id);
+    if (!transaction) {
+      console.warn(`No transaction found for package ${package_id} despite being in purchasedPackagesId`);
+      return false;
+    }
+    const paymentDate = transaction.payment_history?.[0]?.payment_date;
+    const validityEndDate = transaction.validity_end_date || (paymentDate && new Date(new Date(paymentDate).setFullYear(new Date(paymentDate).getFullYear() + 1)));
+    if (!validityEndDate) {
+      console.log(`No validity data for package ${package_id}, assuming valid`);
+      return true;
+    }
+    // Current IST time: July 28, 2025, 2:06 PM IST
+    const currentDate = new Date('2025-07-28T14:06:00+05:30');
+    const isValid = new Date(validityEndDate) > currentDate;
+    console.log(`Package ${package_id} validity check:`, {
+      paymentDate,
+      validityEndDate,
+      currentDate,
+      isValid,
+    });
+    return isValid;
+  }, [purchasedPackagesId, userTransactions, package_id]);
 
   useEffect(() => {
     const selected = packages.find((pkg) => pkg.package_id?.toString() === package_id?.toString());
@@ -171,7 +203,7 @@ export default function Tradedetails() {
 
       {/* Bottom Button */}
       <div className="p-4 space-y-6 pb-24">
-        {isRefundOffer || (trade && purchasedPackagesId.includes(package_id)) ? (
+        {isRefundOffer || isPackageSubscribed() ? (
           <div className="bg-green-100 text-green-700 font-semibold text-center py-3 rounded-lg">
             Subscribed
           </div>

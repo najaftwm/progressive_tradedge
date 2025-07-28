@@ -1,14 +1,16 @@
-// components/SliderButton.jsx
 import React, { useState, useRef } from 'react';
 
-const SliderButton = ({ onComplete }) => {
+const SliderButton = ({ onComplete, subscribed }) => {
   const [isSliding, setIsSliding] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const [completed, setCompleted] = useState(subscribed);
   const sliderRef = useRef(null);
 
-  const handleMouseDown = () => setIsSliding(true);
+  const handleMouseDown = () => {
+    if (!completed) setIsSliding(true);
+  };
+
   const handleMouseUp = (e) => {
-    if (!sliderRef.current) return;
+    if (!sliderRef.current || completed) return;
     const sliderWidth = sliderRef.current.offsetWidth;
     const mouseX = e.clientX - sliderRef.current.getBoundingClientRect().left;
 
