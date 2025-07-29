@@ -7,7 +7,7 @@ import refundFrame from '../images/refundframe1.png';
 import { useStockContext } from '../context/StockContext';
 import ExplorePackageCard from '../components/Home/explorePackageCard';
 import TradeCard from '../components/Home/TradeCard';
-import logo from '../images/logo.png';
+
 
 export default function Home() {
   const navigate = useNavigate();
@@ -80,7 +80,12 @@ console.log('Best trades:', bestTrades);
             >
             Explore
             </button>
-            <img src="/icons/logo.png" alt="Tradedge Logo" className="w-8 h-8" />
+            <img 
+            src="https://progressive-tradedge.vercel.app/icons/logo.png" 
+            alt="Tradedge Logo" 
+            className="w-8 h-8" 
+          />
+
         </div>
         </div>
 
