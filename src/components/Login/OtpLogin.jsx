@@ -217,7 +217,7 @@ const OtpLogin = () => {
     <div className="flex flex-col items-center min-h-screen bg-white">
       <div className="flex flex-col items-center pt-10">
         <img
-          src="src/images/logo.png"
+          src="https://progressive-tradedge.vercel.app/icons/logo.png"
           alt="Tradedge Logo"
           className="w-32 h-32 mb-0"
         />
