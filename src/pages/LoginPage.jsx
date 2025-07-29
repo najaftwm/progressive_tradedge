@@ -10,7 +10,7 @@ import axiosInstance from "../api/axiosInstance";
 import { useLoggerStore } from "@store/log.jsx";
 import LoaderComponent from "../components/common/LoaderComponent";
 import { EyeClosed, Eye } from 'lucide-react';
-import logo1 from "../../public/logomain.png"
+import logo1 from "../../public/logo.png"
 
 const LoginPage = () => {
   const { setActiveUserData, activeUserData } = useContext(AppContext);
