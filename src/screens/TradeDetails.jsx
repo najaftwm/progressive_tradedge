@@ -90,28 +90,32 @@ export default function Tradedetails() {
     return { borderColor: 'text-red-600', Icon: ExclamationCircleIcon };
   };
 
-  const handlePayment = async () => {
-    const transaction_id = `TXN_${Date.now()}`;
-    const payment_date = getISTDate();
+ const handlePayment = () => {
+  const transaction_id = `TXN_${Date.now()}`;
+  const amount = Number(isRefundOffer ? refundOfferData.price : trade.price);
 
-    try {
-      setIsRedirecting(true);
-      const response = await axios.post('https://tradedge-server.onrender.com/api/paymentURL', {
-        redirectUrl: `http://localhost:49000/paymentResult`,
-        amount: Number(isRefundOffer ? refundOfferData.price : trade.price),
-        user_id: null, // Replace with actual user_id
-        package_id,
+  try {
+    const upiLink = `upi://pay?pa=suryanshchandel09@sbi&pn=ASHUTOSH%20MISHRA&mc=0000&tid=${transaction_id}&tn=Tradedge%20Package%20Purchase&am=${amount}&cu=INR`;
+
+    // Save transaction details
+    localStorage.setItem(
+      'transactionDetails',
+      JSON.stringify({
+        package_id: package_id,
+        user_id: null, // Replace with actual user_id if available
+        amount: amount,
         transaction_id,
-        payment_date,
-      });
+        payment_date: getISTDate(),
+      })
+    );
 
-      window.location.href = response.data.redirectUrl;
-    } catch (error) {
-      alert('Failed to redirect to payment.');
-    } finally {
-      setIsRedirecting(false);
-    }
-  };
+    // Redirect to UPI app
+    window.location.href = upiLink;
+  } catch (error) {
+    alert('Failed to open UPI payment app. Please try again.');
+  }
+};
+
 
   if (isRedirecting) {
     return (

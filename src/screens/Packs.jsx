@@ -59,41 +59,33 @@ const Packs = () => {
     });
   };
 
-  const handleBuyNow = async item => {
+ const handleBuyNow = (item) => {
+  try {
     const transaction_id = `TXN_${Date.now()}`;
-    const payment_date = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
-      .toISOString()
-      .slice(0, 19)
-      .replace('T', ' ');
-    try {
-      localStorage.setItem(
-        'transactionDetails',
-        JSON.stringify({
-          package_id: item.package_id,
-          user_id: userDetails.user_id,
-          amount: item.price,
-          payment_date,
-          transaction_id,
-        })
-      );
-      const result = await axios.post('https://tradedge-server.onrender.com/api/paymentURL', {
-        redirectUrl: `/paymentResult`,
-        amount: Number(item.price),
-        user_id: userDetails.user_id,
+    const upiLink = `upi://pay?pa=suryanshchandel09@sbi&pn=ASHUTOSH%20MISHRA&mc=0000&tid=${transaction_id}&tn=Tradedge%20Package%20Purchase&am=${item.price}&cu=INR`;
+
+    // Store transaction details (optional)
+    localStorage.setItem(
+      'transactionDetails',
+      JSON.stringify({
         package_id: item.package_id,
+        user_id: userDetails.user_id,
+        amount: item.price,
         transaction_id,
-        payment_date,
-      });
-      const paymentUrl = result.data?.redirectUrl;
-      if (!paymentUrl) {
-        alert('Payment URL not received. Please try again.');
-        return;
-      }
-      window.location.href = paymentUrl;
-    } catch (error) {
-      alert('Failed to open the URL. Please try again later.');
-    }
-  };
+        payment_date: new Date(Date.now() + 5.5 * 60 * 60 * 1000)
+          .toISOString()
+          .slice(0, 19)
+          .replace('T', ' '),
+      })
+    );
+
+    // Open UPI payment app
+    window.location.href = upiLink;
+  } catch (error) {
+    alert('Failed to open UPI app. Please try again.');
+  }
+};
+
 
   // === After hooks, conditional returns ===
   if (!accessToken) {

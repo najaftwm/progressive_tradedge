@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffcbe4" />
+    <meta name="description" content="Trading website" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/png" href="/minor2.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://kit.fontawesome.com/683cf4083c.js" crossorigin="anonymous"></script>
+    <title>Tradedge</title>
+    <script type="module" crossorigin src="/assets/index-ad48a3ba.js"></script>
+    <link rel="stylesheet" href="/assets/index-1cbadf46.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((reg) => console.log("Service Worker registered:", reg))
+            .catch((err) => console.log("Service Worker error:", err));
+        });
+      }
+    </script>
+  </body>
+</html>

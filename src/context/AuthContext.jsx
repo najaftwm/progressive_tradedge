@@ -98,6 +98,30 @@ export const AuthProvider = ({ children }) => {
     checkLoginStatus();
   }, []);
 
+  const refreshToken = useCallback(async () => {
+    try {
+      console.log('Refreshing token with refresh_token:', authData.refresh_token ? 'Present' : 'Absent');
+      const response = await axios.post('https://tradedge-server.onrender.com/api/refreshToken', {
+        refresh_token: authData.refresh_token,
+      });
+      const newAuthData = {
+        ...authData,
+        access_token: response.data.access_token,
+        access_token_expiry: response.data.access_token_expiry,
+        refresh_token: response.data.refresh_token || authData.refresh_token,
+        refresh_token_expiry: response.data.refresh_token_expiry || authData.refresh_token_expiry,
+        isAuthenticated: true,
+      };
+      setAuthData(newAuthData);
+      localStorage.setItem('authData', JSON.stringify(newAuthData));
+      console.log('Token refreshed successfully:', newAuthData.access_token);
+      return newAuthData.access_token;
+    } catch (error) {
+      console.error('Token refresh failed:', error.response?.data?.message || error.message);
+      throw new Error('Failed to refresh token');
+    }
+  }, [authData]);
+
   const fetchUserDetails = useCallback(async (userId) => {
     if (!userId) {
       console.warn('fetchUserDetails - No userId provided');
@@ -373,6 +397,7 @@ export const AuthProvider = ({ children }) => {
     sendKycConfirmationMail,
     fetchUserDetails,
     fetchUserTransactions,
+    refreshToken,
   }), [
     authData,
     isInitializing,
@@ -392,6 +417,7 @@ export const AuthProvider = ({ children }) => {
     sendKycConfirmationMail,
     fetchUserDetails,
     fetchUserTransactions,
+    refreshToken,
   ]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

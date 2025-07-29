@@ -12,7 +12,7 @@ const formatIndianRupee = (amount) => {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
-  return formatter.format(amount);
+  return formatter.format(amount / 100);
 };
 
 const getISTDate = () => {
@@ -24,7 +24,7 @@ const getISTDate = () => {
 
 const PaymentResult = () => {
   const { authData, userDetails, fetchUserTransactions } = useAuth();
-  const { packages, fetchPackages } = useStockContext();
+  const { packages } = useStockContext();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [transaction_id, setTransactionId] = useState(null);
@@ -38,34 +38,26 @@ const PaymentResult = () => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
   const [dbUpdateError, setDbUpdateError] = useState(null);
-  const [apiError, setApiError] = useState(null);
   const animationRef = useRef(null);
 
   const userEmail = userDetails?.user_email_id;
   const userName = userDetails?.user_name;
-
-  // Validate auth and user details
-  if (!authData?.access_token || !userDetails) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <p className="text-red-600 text-center">Authentication error. Please log in again.</p>
-        <button
-          className="mt-4 px-6 py-2 text-lg text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
-          onClick={() => navigate('/login')}
-        >
-          Log In
-        </button>
-      </div>
-    );
-  }
+  const isAuthenticated = authData?.access_token && userDetails;
 
   useEffect(() => {
-    const packageId = searchParams.get('package_id');
-    if (packageId) {
-      setPackageId(packageId);
+    // Retrieve package_id from URL or localStorage
+    const packageIdFromUrl = searchParams.get('package_id');
+    const packageIdFromStorage = localStorage.getItem('selectedPackageId');
+    if (packageIdFromUrl) {
+      console.log('Package ID from URL:', packageIdFromUrl);
+      setPackageId(packageIdFromUrl);
+      localStorage.setItem('selectedPackageId', packageIdFromUrl);
+    } else if (packageIdFromStorage) {
+      console.log('Package ID from localStorage:', packageIdFromStorage);
+      setPackageId(packageIdFromStorage);
     } else {
-      setApiError('Package ID is missing from URL parameters.');
-      setLoading(false);
+      console.warn('No package ID found in URL or localStorage');
+      setPackageId(null);
     }
   }, [searchParams]);
 
@@ -77,17 +69,24 @@ const PaymentResult = () => {
         if (storedTransactionDetails) {
           const parsedDetails = JSON.parse(storedTransactionDetails);
           setTransactionId(parsedDetails.transaction_id || null);
-          setPackageId(parsedDetails.package_id || null);
+          // Prioritize URL/localStorage package_id over transactionDetails
+          setPackageId(parsedDetails.package_id || localStorage.getItem('selectedPackageId') || null);
           setUserId(parsedDetails.user_id || null);
           setAmount(parsedDetails.amount || null);
           setPaymentDate(parsedDetails.payment_date || null);
+          if (parsedDetails.payment_status === 'COMPLETED') {
+            setStatus('SUCCESS');
+            setTransactionDetails({
+              transaction_id: parsedDetails.transaction_id,
+              payment_method: parsedDetails.payment_method || 'NET_BANKING',
+              amount: parsedDetails.amount,
+            });
+          }
         } else {
-          setApiError('No transaction details found in localStorage.');
           setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching transaction details from localStorage:', error.message);
-        setApiError('Failed to load transaction details from localStorage.');
         setLoading(false);
       }
     };
@@ -99,14 +98,19 @@ const PaymentResult = () => {
 
     const fetchPaymentStatus = async () => {
       if (!transaction_id || !isMounted) {
-        setApiError('Transaction ID is missing. Please initiate the payment again.');
+        if (status !== 'SUCCESS') {
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (!isAuthenticated) {
         setLoading(false);
         return;
       }
 
-      const isTokenValid = authData.access_token && authData.access_token_expiry > Math.floor(Date.now() / 1000);
-      if (!isTokenValid) {
-        setApiError('Authentication token is invalid or expired. Please log in again.');
+      if (user_id && userDetails?.user_id && user_id !== userDetails.user_id) {
+        console.error(`User ID mismatch: expected ${user_id}, got ${userDetails.user_id}`);
         setLoading(false);
         return;
       }
@@ -118,16 +122,15 @@ const PaymentResult = () => {
       while (attempts < MAX_RETRIES && isMounted) {
         try {
           console.log('Fetching payment status with:', { transaction_id, token: authData.access_token });
-          setApiError(null);
           const response = await axios.get(`https://tradedge-server.onrender.com/api/paymentStatus`, {
             params: { transaction_id },
             headers: { Authorization: `Bearer ${authData.access_token}` },
-            timeout: 10000, // 10-second timeout
+            timeout: 10000,
           });
 
           console.log('API Response:', response.data);
 
-          if (response.data && response.data.status) {
+          if (response.data && response.data.status && typeof response.data.status === 'object') {
             const paymentData = response.data.status;
             const paymentState = paymentData.state || 'FAILURE';
             const paymentDetails = paymentData.paymentDetails?.[0] || {};
@@ -135,18 +138,18 @@ const PaymentResult = () => {
             setStatus(paymentState === 'COMPLETED' ? 'SUCCESS' : 'FAILURE');
             setTransactionDetails({
               transaction_id: paymentDetails.transactionId || transaction_id,
-              payment_method: paymentDetails.paymentMode || 'PHONEPE',
+              payment_method: paymentDetails.paymentMode || 'NET_BANKING',
               amount: paymentDetails.amount,
             });
 
             const updatedTransactionDetails = {
               transaction_id: paymentDetails.transactionId || transaction_id,
-              package_id,
+              package_id: package_id || localStorage.getItem('selectedPackageId') || 'DEFAULT',
               user_id,
               amount: paymentDetails.amount || amount,
               payment_status: paymentState,
               payment_date: payment_date || getISTDate(),
-              payment_method: paymentDetails.paymentMode || 'PHONEPE',
+              payment_method: paymentDetails.paymentMode || 'NET_BANKING',
             };
 
             localStorage.setItem('transactionDetails', JSON.stringify(updatedTransactionDetails));
@@ -154,23 +157,36 @@ const PaymentResult = () => {
             await updateDB(paymentState, paymentDetails.paymentMode);
             await fetchUserTransactions(user_id);
 
-            if (paymentState === 'COMPLETED' && package_id && userEmail && userName) {
+            if (paymentState === 'COMPLETED' && package_id && package_id !== 'DEFAULT' && userEmail && userName) {
               const packageData = await fetchPackageDetails(package_id);
               if (packageData && isMounted) {
                 await sendConfirmationEmail({
                   email: userEmail,
                   name: userName,
                   transaction_id: paymentDetails.transactionId || transaction_id,
-                  payment_method: paymentDetails.paymentMode || 'PHONEPE',
+                  payment_method: paymentDetails.paymentMode || 'NET_BANKING',
                   amount: Number(paymentDetails.amount || amount),
                   packageDetails: packageData,
                 });
+              } else {
+                console.warn('Skipping email due to missing package data:', package_id);
               }
+            } else {
+              console.warn('Skipping email due to invalid package_id or user details:', { package_id, userEmail, userName });
             }
             setLoading(false);
             return;
           } else {
-            throw new Error('Invalid response format from payment status API');
+            console.warn('Received invalid status from server:', response.data);
+            if (status === 'SUCCESS') {
+              console.log('Using localStorage data due to invalid API response');
+              await updateDB('COMPLETED', transactionDetails?.payment_method || 'NET_BANKING');
+              await fetchUserTransactions(user_id);
+              setLoading(false);
+              return;
+            }
+            setLoading(false);
+            return;
           }
         } catch (error) {
           attempts++;
@@ -181,11 +197,14 @@ const PaymentResult = () => {
             : error.message;
           console.error(`Attempt ${attempts} failed:`, errorMsg);
           if (attempts === MAX_RETRIES) {
-            if (isMounted) {
-              setStatus('FAILURE');
-              setApiError(`Failed to fetch payment status: ${errorMsg}`);
+            if (isMounted && status === 'SUCCESS') {
+              console.log('Using localStorage data after max retries');
+              await updateDB('COMPLETED', transactionDetails?.payment_method || 'NET_BANKING');
+              await fetchUserTransactions(user_id);
               setLoading(false);
+              return;
             }
+            setLoading(false);
             return;
           }
           await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempts));
@@ -197,40 +216,57 @@ const PaymentResult = () => {
     return () => {
       isMounted = false;
     };
-  }, [transaction_id, package_id, user_id, amount, payment_date, userDetails, fetchUserTransactions, authData, userEmail, userName]);
+  }, [transaction_id, package_id, user_id, amount, payment_date, isAuthenticated, userDetails, fetchUserTransactions, userEmail, userName, status]);
 
   const updateDB = async (paymentState, payment_method) => {
-    try {
-      setDbUpdateError(null);
-      const response = await axios.post(
-        `https://tradedge-server.onrender.com/api/addPaymentindb`,
-        {
-          package_id,
-          user_id,
-          amount,
-          payment_status: paymentState,
-          payment_date: payment_date || getISTDate(),
-          transaction_id,
-          payment_method: payment_method || 'PHONEPE',
-        },
-        {
-          headers: { Authorization: `Bearer ${authData.access_token}` },
-          timeout: 10000,
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 1000;
+    let attempts = 0;
+
+    while (attempts < MAX_RETRIES) {
+      try {
+        setDbUpdateError(null);
+        const response = await axios.post(
+          `https://tradedge-server.onrender.com/api/addPaymentindb`,
+          {
+            package_id: package_id || localStorage.getItem('selectedPackageId') || 'DEFAULT',
+            user_id: user_id || userDetails?.user_id,
+            amount,
+            payment_status: paymentState,
+            payment_date: payment_date || getISTDate(),
+            transaction_id,
+            payment_method: payment_method || 'NET_BANKING',
+          },
+          {
+            headers: { Authorization: `Bearer ${authData.access_token}` },
+            timeout: 10000,
+          }
+        );
+        console.log('Payment status updated in DB:', response.data);
+        return;
+      } catch (error) {
+        attempts++;
+        const errorMsg = error.response
+          ? `Server error: ${error.response.status} - ${JSON.stringify(error.response.data)}`
+          : error.request
+          ? 'No response received from server.'
+          : error.message;
+        console.error(`updateDB attempt ${attempts} failed:`, errorMsg);
+        if (attempts === MAX_RETRIES) {
+          setDbUpdateError(`Failed to update payment status: ${errorMsg}`);
+          console.error(`Final updateDB error: ${errorMsg}`);
+          return;
         }
-      );
-      console.log('Payment status updated in DB:', response.data);
-    } catch (error) {
-      const errorMsg = error.response
-        ? `Server error: ${error.response.status} - ${JSON.stringify(error.response.data)}`
-        : error.request
-        ? 'No response received from server.'
-        : error.message;
-      setDbUpdateError(`Error updating payment status: ${errorMsg}`);
-      console.error(errorMsg);
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * attempts));
+      }
     }
   };
 
   const fetchPackageDetails = async (id) => {
+    if (!id || id === 'DEFAULT') {
+      console.warn('fetchPackageDetails: Invalid package_id', id);
+      return null;
+    }
     const url = `https://gateway.twmresearchalert.com/package?package_id=${id}`;
     console.log('Fetching package from URL:', url);
     try {
@@ -250,15 +286,18 @@ const PaymentResult = () => {
         ? 'No response received from server.'
         : error.message;
       console.error('Failed to fetch package details:', errorMsg);
-      setApiError('Failed to fetch package details.');
       return null;
     }
   };
 
   const sendConfirmationEmail = async ({ email, name, transaction_id, payment_method, amount, packageDetails }) => {
+    if (!packageDetails) {
+      console.warn('sendConfirmationEmail: Missing package details');
+      return;
+    }
     try {
       const response = await axios.post(
-        'http://gateway.twmresearchalert.com?url=sendpackagemail',
+        'https://gateway.twmresearchalert.com?url=sendpackagemail',
         {
           email,
           name,
@@ -285,7 +324,6 @@ const PaymentResult = () => {
         ? 'No response received from server.'
         : error.message;
       console.error('Error sending confirmation email:', errorMsg);
-      setApiError('Failed to send confirmation email.');
     }
   };
 
@@ -319,7 +357,21 @@ const PaymentResult = () => {
     };
   }, [showAnimation, animationKey]);
 
-  if (loading || status === null) {
+  if (!isAuthenticated) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <p className="text-red-600 text-center">Authentication error. Please log in again.</p>
+        <button
+          className="mt-4 px-6 py-2 text-lg text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
+          onClick={() => navigate('/')}
+        >
+          Log In
+        </button>
+      </div>
+    );
+  }
+
+  if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-500"></div>
@@ -366,7 +418,7 @@ const PaymentResult = () => {
               <p className="text-gray-800 text-center">
                 Amount:{' '}
                 <span className="font-semibold">
-                  {transactionDetails?.amount ? formatIndianRupee(Number(transactionDetails.amount) / 100) : 'N/A'}
+                  {transactionDetails?.amount ? formatIndianRupee(Number(transactionDetails.amount)) : 'N/A'}
                 </span>
               </p>
             </>
@@ -381,11 +433,10 @@ const PaymentResult = () => {
               </button>
             </div>
           )}
-          {dbUpdateError && (
-            <p className="text-red-600 text-center mt-3">{dbUpdateError}</p>
-          )}
-          {apiError && (
-            <p className="text-red-600 text-center mt-3">{apiError}</p>
+          {user_id && userDetails?.user_id && user_id !== userDetails.user_id && (
+            <p className="text-orange-600 text-center mt-3">
+              User ID mismatch detected. Please log in with the correct account or contact support with Transaction ID: {transactionDetails?.transaction_id}.
+            </p>
           )}
         </div>
         <button
