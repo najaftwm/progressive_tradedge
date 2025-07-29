@@ -80,7 +80,7 @@ console.log('Best trades:', bestTrades);
             >
             Explore
             </button>
-            <img src={logo} alt="Tradedge Logo" className="w-8 h-8" />
+            <img src="/icons/logo.png" alt="Tradedge Logo" className="w-8 h-8" />
         </div>
         </div>
 

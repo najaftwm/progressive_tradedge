@@ -110,7 +110,7 @@ const LoginPage = () => {
     {loaderActive && <LoaderComponent />}
     <div className="w-full max-w-md space-y-8  border border-gray-200 bg-white px-6 py-8  sm:px-10 sm:py-8">
       <div className="flex flex-col items-center justify-center">
-        <img src={logo1} className="w-[300px] max-w-full" />
+        <img src="/icons/logo.png" alt="Tradedge Logo"  className="w-[300px] max-w-full" />
         {/* <p className="mt-3 text-sm text-gray-600">
           Please enter your User ID and password to log in.
         </p> */}
