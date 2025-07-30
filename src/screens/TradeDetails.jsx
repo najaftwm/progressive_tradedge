@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useStockContext } from '../context/StockContext';
-import { useAuth } from '../context/AuthContext'; // Added import
+import { useAuth } from '../context/AuthContext';
 
 // Heroicons
 import {
@@ -13,11 +13,11 @@ import {
   ExclamationCircleIcon,
 } from '@heroicons/react/24/solid';
 
-export default function Tradedetails() {
+export default function TradeDetails() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { packages } = useStockContext();
-  const { purchasedPackagesId, userTransactions } = useAuth(); // Added useAuth
+  const { purchasedPackagesId, userTransactions } = useAuth();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const package_id = searchParams.get('package_id');
   const [trade, setTrade] = useState(null);
@@ -90,32 +90,30 @@ export default function Tradedetails() {
     return { borderColor: 'text-red-600', Icon: ExclamationCircleIcon };
   };
 
- const handlePayment = () => {
-  const transaction_id = `TXN_${Date.now()}`;
-  const amount = Number(isRefundOffer ? refundOfferData.price : trade.price);
-
-  try {
+  const handlePayment = () => {
+    const transaction_id = `TXN_${Date.now()}`;
+    const amount = Number(isRefundOffer ? refundOfferData.price : trade.price);
     const upiLink = `upi://pay?pa=suryanshchandel09@sbi&pn=ASHUTOSH%20MISHRA&mc=0000&tid=${transaction_id}&tn=Tradedge%20Package%20Purchase&am=${amount}&cu=INR`;
 
-    // Save transaction details
-    localStorage.setItem(
-      'transactionDetails',
-      JSON.stringify({
-        package_id: package_id,
-        user_id: null, // Replace with actual user_id if available
-        amount: amount,
-        transaction_id,
-        payment_date: getISTDate(),
-      })
-    );
+    try {
+      // Save transaction details
+      localStorage.setItem(
+        'transactionDetails',
+        JSON.stringify({
+          package_id: package_id,
+          user_id: null, // Replace with actual user_id if available
+          amount: amount,
+          transaction_id,
+          payment_date: getISTDate(),
+        })
+      );
 
-    // Redirect to UPI app
-    window.location.href = upiLink;
-  } catch (error) {
-    alert('Failed to open UPI payment app. Please try again.');
-  }
-};
-
+      // Navigate to payment screen with query parameters
+      navigate(`/payment?packageTitle=${encodeURIComponent(isRefundOffer ? refundOfferData.title : trade.title)}&amount=${amount}&paymentLink=${encodeURIComponent(upiLink)}`);
+    } catch (error) {
+      alert('Failed to initiate payment. Please try again.');
+    }
+  };
 
   if (isRedirecting) {
     return (

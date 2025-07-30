@@ -59,33 +59,32 @@ const Packs = () => {
     });
   };
 
- const handleBuyNow = (item) => {
-  try {
-    const transaction_id = `TXN_${Date.now()}`;
-    const upiLink = `upi://pay?pa=suryanshchandel09@sbi&pn=ASHUTOSH%20MISHRA&mc=0000&tid=${transaction_id}&tn=Tradedge%20Package%20Purchase&am=${item.price}&cu=INR`;
+  const handleBuyNow = (item) => {
+    try {
+      const transaction_id = `TXN_${Date.now()}`;
+      const upiLink = `upi://pay?pa=suryanshchandel09@sbi&pn=ASHUTOSH%20MISHRA&mc=0000&tid=${transaction_id}&tn=Tradedge%20Package%20Purchase&am=${item.price}&cu=INR`;
 
-    // Store transaction details (optional)
-    localStorage.setItem(
-      'transactionDetails',
-      JSON.stringify({
-        package_id: item.package_id,
-        user_id: userDetails.user_id,
-        amount: item.price,
-        transaction_id,
-        payment_date: new Date(Date.now() + 5.5 * 60 * 60 * 1000)
-          .toISOString()
-          .slice(0, 19)
-          .replace('T', ' '),
-      })
-    );
+      // Store transaction details (optional)
+      localStorage.setItem(
+        'transactionDetails',
+        JSON.stringify({
+          package_id: item.package_id,
+          user_id: userDetails.user_id,
+          amount: item.price,
+          transaction_id,
+          payment_date: new Date(Date.now() + 5.5 * 60 * 60 * 1000)
+            .toISOString()
+            .slice(0, 19)
+            .replace('T', ' '),
+        })
+      );
 
-    // Open UPI payment app
-    window.location.href = upiLink;
-  } catch (error) {
-    alert('Failed to open UPI app. Please try again.');
-  }
-};
-
+      // Navigate to payment screen with query parameters
+      navigate(`/payment?packageTitle=${encodeURIComponent(item.title)}&amount=${item.price}&paymentLink=${encodeURIComponent(upiLink)}`);
+    } catch (error) {
+      alert('Failed to initiate payment. Please try again.');
+    }
+  };
 
   // === After hooks, conditional returns ===
   if (!accessToken) {

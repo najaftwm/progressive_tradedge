@@ -148,7 +148,7 @@ import PaymentResult from './components/PaymentResult';
 import TradeDetailedCard from './components/Home/Tradedetailedcard';
 import PackagesScreen from './screens/main/buy-packages';
 import TransactionHistoryPage from './components/TransactionHistory';
-
+import PaymentScreen from './components/PaymentResult/paymentscreen';
 function App() {
   return (
     <AuthProvider>
@@ -170,6 +170,7 @@ function App() {
               <Route path="/main/TradeDetailedCard" element={<TradeDetailedCard />} />
               <Route path="/user_package" element={<PackagesScreen />} />
               <Route path="/transactions-history" element={<TransactionHistoryPage />} />
+              <Route path="/payment" element={<PaymentScreen />} />
             </Route>
           </Routes>
         </BrowserRouter>
