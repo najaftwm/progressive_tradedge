@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { ArrowLeft } from 'lucide-react';
+ // adjust path based on component location
 
 const PaymentScreen = () => {
   const [searchParams] = useSearchParams();
@@ -43,7 +44,7 @@ const PaymentScreen = () => {
   return (
     <div className="min-h-screen p-4 bg-gray-100 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-gradient-to-r pt-11 bg-gray-500 text-white rounded-xl shadow-lg p-4 mb-6 flex items-center justify-between">
+      <div className="bg-gradient-to-r  bg-gray-500 pt-10 text-white rounded-xl shadow-lg p-4 mb-6 flex items-center justify-between">
         <button
           onClick={() => navigate(-1)}
           className="p-2 rounded-lg bg-black bg-opacity-10 hover:bg-opacity-20 transition-colors"
@@ -68,16 +69,24 @@ const PaymentScreen = () => {
 
         {/* Pay with UPI Button */}
         <div
-          ref={buttonRef}
-          className="w-full max-w-md transform transition-transform hover:scale-105"
+        ref={buttonRef}
+        className="w-full max-w-md transform transition-transform hover:scale-105"
+      >
+        <button
+          onClick={handleUPIPayment}
+          className="w-full bg-green-500 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-green-600 transition-all duration-200 flex items-center justify-center gap-3"
         >
-          <button
-            onClick={handleUPIPayment}
-            className="w-full bg-gradient-to-r  bg-green-500 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-green-500 transition-colors duration-150"
-          >
-            Pay with UPI App
-          </button>
-        </div>
+          <div className="bg-white rounded-full p-1 shadow-md">
+            <img
+              src="/upi.png"
+              alt="UPI Payment"
+              className="w-10 h-10 object-contain"
+            />
+          </div>
+          <span className="text-lg">Pay with UPI App</span>
+        </button>
+      </div>
+
 
         {/* OR Separator with Lines */}
         <div className="w-full max-w-md flex items-center justify-center">
