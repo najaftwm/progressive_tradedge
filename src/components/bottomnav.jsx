@@ -21,7 +21,7 @@ const BottomNav = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black text-white flex justify-around py-2 shadow-md z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-black text-white flex justify-around py-2 pb-7 shadow-md z-50">
       {navItems.map(({ label, path, icon: Icon }) => {
         const isActive = location.pathname === path;
         const isTrades = label === "Trades";

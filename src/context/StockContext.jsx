@@ -44,66 +44,86 @@ export const StockProvider = ({ children }) => {
     }
   }, []);
 
-  const fetchPackages = useCallback(async (forceRefresh = false) => {
-    const cacheKey = 'cachedPackages';
-    const cacheTimeKey = 'cachedPackagesTime';
+ const fetchPackages = useCallback(async (forceRefresh = false) => {
+  const cacheKey = 'cachedPackages';
+  const cacheTimeKey = 'cachedPackagesTime';
 
-    if (!forceRefresh) {
-      try {
-        const cached = localStorage.getItem(cacheKey);
-        const cachedTime = localStorage.getItem(cacheTimeKey);
-        if (cached && cachedTime && Date.now() - parseInt(cachedTime) < CACHE_DURATION) {
-          const data = JSON.parse(cached);
-          setPackages(data);
-          return;
+  if (!forceRefresh) {
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      const cachedTime = localStorage.getItem(cacheTimeKey);
+      if (cached && cachedTime && Date.now() - parseInt(cachedTime) < CACHE_DURATION) {
+        const data = JSON.parse(cached);
+        // Check if cached data is empty
+        if (!data || data.length === 0) {
+          throw new Error('No packages found in cache');
         }
-      } catch {}
+        setPackages(data);
+        return;
+      }
+    } catch (cacheError) {
+      console.error('Error loading packages from cache:', cacheError);
+    }
+  }
+
+  try {
+    setLoading(true); // Set loading state at the start of fetching
+    setError(null); // Clear any previous errors
+
+    // Prefer token from AuthContext, fallback to localStorage
+    let token = authData?.access_token;
+    if (!token) {
+      const storedData = localStorage.getItem('authData');
+      token = storedData ? JSON.parse(storedData).access_token : null;
+    }
+    console.log('Access token:', token ? 'Present' : 'Missing');
+    if (!token) throw new Error('No token');
+
+    const response = await fetch('https://gateway.twmresearchalert.com/package', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
+
+    const data = await response.json();
+    console.log('API response:', data);
+
+    if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
+      throw new Error('No packages found or invalid package data format');
     }
 
-    try {
-      // Prefer token from AuthContext, fallback to localStorage
-      let token = authData?.access_token;
-      if (!token) {
-        const storedData = localStorage.getItem('authData');
-        token = storedData ? JSON.parse(storedData).access_token : null;
+    const transformed = data.data.flatMap((type) => {
+      if (!type.subtypes || !Array.isArray(type.subtypes)) {
+        console.warn('Invalid subtype data for type:', type.type_name);
+        return [];
       }
-      console.log('Access token:', token ? 'Present' : 'Missing');
-      if (!token) throw new Error('No token');
+      return type.subtypes.map((subtype) => ({
+        type_id: type.type_id || '',
+        type_name: type.type_name || '',
+        package_id: subtype.subtype_id || '',
+        title: subtype.subtype_name || 'Unnamed',
+        price: subtype.price?.toString() || 'N/A',
+        details: Array.isArray(subtype.details) ? subtype.details : ['No details'],
+        categoryTag: type.type_name || 'Uncategorized',
+        icon: getIconForCategory(type.type_name),
+        riskCategory: subtype.riskCategory || 'N/A',
+        minimumInvestment: subtype.minimumInvestment || 'N/A',
+        profitPotential: '15-25% p.a.',
+      }));
+    });
 
-      const response = await fetch('https://gateway.twmresearchalert.com/package', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+    // Check if transformed packages are empty
+    if (transformed.length === 0) {
+      throw new Error('No valid packages could be transformed from server data');
+    }
 
-      if (!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
-
-      const data = await response.json();
-      console.log('API response:', data);
-
-      if (!data.data || !Array.isArray(data.data)) {
-        throw new Error('Invalid package data format');
-      }
-
-      const transformed = data.data.flatMap((type) => {
-        return type.subtypes.map((subtype) => ({
-          type_id: type.type_id || '',
-          type_name: type.type_name || '',
-          package_id: subtype.subtype_id || '',
-          title: subtype.subtype_name || 'Unnamed',
-          price: subtype.price?.toString() || 'N/A',
-          details: Array.isArray(subtype.details) ? subtype.details : ['No details'],
-          categoryTag: type.type_name || 'Uncategorized',
-          icon: getIconForCategory(type.type_name),
-          riskCategory: subtype.riskCategory || 'N/A',
-          minimumInvestment: subtype.minimumInvestment || 'N/A',
-          profitPotential: '15-25% p.a.',
-        }));
-      });
-
-      // Add refund offer package
-      transformed.push({
+    // Add refund offer package
+    const allPackages = [
+      ...transformed,
+      {
         package_id: '10000',
         title: 'Refund offer',
         price: '10000',
@@ -118,19 +138,21 @@ export const StockProvider = ({ children }) => {
         riskCategory: 'Low',
         icon: 'star',
         profitPotential: '10-20% p.a.',
-      });
+      },
+    ];
 
-      setPackages(transformed);
-      const now = Date.now();
-      localStorage.setItem(cacheKey, JSON.stringify(transformed));
-      localStorage.setItem(cacheTimeKey, now.toString());
-      setLastFetchTime(now);
-    } catch (err) {
-      setError('Failed to fetch packages');
-    } finally {
-      setLoading(false);
-    }
-  }, [getIconForCategory]);
+    setPackages(allPackages);
+    const now = Date.now();
+    localStorage.setItem(cacheKey, JSON.stringify(allPackages));
+    localStorage.setItem(cacheTimeKey, now.toString());
+    setLastFetchTime(now);
+  } catch (err) {
+    console.error('Error fetching packages:', err);
+    setError(err.message || 'Failed to fetch packages');
+  } finally {
+    setLoading(false);
+  }
+}, [getIconForCategory, authData?.access_token]);
 
   const fetchAllData = useCallback(async (forceRefresh = false) => {
     setLoading(true);
