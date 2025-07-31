@@ -270,7 +270,7 @@ export default function Stocks() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-4 pt-20 pb-6">
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white px-4 pt-20 ">
       <div className="max-w-xl mx-auto">
         {/* Search Bar */}
         <div className="flex gap-2 items-center mb-6">

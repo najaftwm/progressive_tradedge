@@ -15,8 +15,8 @@ const TradeCard = ({ item }) => {
   const Icon = iconMap[item.icon] || MdInfo;
 
   const handleTradePress = () => {
-  navigate(`/Tradedetails?package_id=${item.package_id}`);
-};
+    navigate(`/Tradedetails?package_id=${item.package_id}`);
+  };
 
   const displayPrice = item.price && !isNaN(Number(item.price))
     ? new Intl.NumberFormat('en-IN').format(Number(item.price))
@@ -29,12 +29,12 @@ const TradeCard = ({ item }) => {
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-2">
-        <h2 className="font-semibold text-xs sm:text-sm text-gray-900 truncate w-3/4 md:text-base">{item.title}</h2>
+        <h2 className="font-semibold text-l sm:text-sm text-gray-900 truncate w-3/4 md:text-base">{item.title}</h2>
         <Icon className="text-gray-700 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
       </div>
 
       {/* Card Background */}
-      <div className="relative h-[80%] flex flex-col justify-center items-center bg-white rounded-lg overflow-hidden">
+      <div className="relative h-[80%] flex flex-col items-center justify-center gap-2 bg-white rounded-lg overflow-hidden">
         <motion.div
           className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-200 to-blue-400 opacity-20"
           animate={{ scale: [1, 1.1, 1] }}
@@ -42,15 +42,15 @@ const TradeCard = ({ item }) => {
         />
 
         {/* Price */}
-        <div className="z-10 text-center mb-2">
-          <p className="text-sm sm:text-lg font-bold text-white bg-green-600 px-2 py-1 rounded-md md:text-xl">
+        <div className="z-10 text-center">
+          <p className="text-lg sm:text-xl font-bold text-white bg-green-600 px-4 py-2 rounded-lg md:text-2xl">
             ₹ {displayPrice}/-
           </p>
         </div>
 
         {/* Subscribe */}
         <div className="z-10">
-          <div className="bg-gradient-to-b from-yellow-400 to-yellow-500 px-2 py-1 rounded-full border border-yellow-700 text-white font-medium text-xs sm:text-sm md:text-base">
+          <div className="bg-gradient-to-b from-yellow-400 to-yellow-500 px-4 py-2 rounded-3xl border border-yellow-700 text-white font-bold text-sm sm:text-base md:text-lg">
             Subscribe
           </div>
         </div>

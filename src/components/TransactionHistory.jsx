@@ -112,9 +112,9 @@ export default function TransactionHistoryPage() {
     .filter((section) => section.data.length > 0);
 
   // Debug logs
-  console.log('✅ Grouped Payments:', groupedPayments);
+  console.log(' Grouped Payments:', groupedPayments);
   console.log('🔍 Normalized Query:', normalizedQuery);
-  console.log('✅ Filtered Sections:', filteredSections);
+  console.log(' Filtered Sections:', filteredSections);
 
   // Auto-expand all sections when data is loaded
   useEffect(() => {

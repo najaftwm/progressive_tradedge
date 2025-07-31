@@ -65,7 +65,7 @@ const OtpInput = ({
       if (response.ok) {
         return true;
       } else {
-        console.error('❌ WhatsApp message failed:', result);
+        console.error(' WhatsApp message failed:', result);
         return false;
       }
     } catch (error) {
@@ -77,9 +77,9 @@ const OtpInput = ({
   const handleVerifyOtp = async () => {
     const otp = otpDigits.join('');
     const success = await handleOtpSubmit(otp);
-    console.log('✅ OTP Verification Result:', success);
+    console.log(' OTP Verification Result:', success);
     if (success) {
-      console.log("✅ OTP verified successfully.");
+      console.log(" OTP verified successfully.");
       if (!whatsAppSent) {
         const sent = await sendOtpSuccessWhatsAppMessage();
         console.log("📨 WhatsApp message sent?", sent);
@@ -91,7 +91,7 @@ const OtpInput = ({
       }
     } else {
       notifyUser('OTP verification failed. Please try again.');
-      console.log("❌ OTP verification failed.");
+      console.log(" OTP verification failed.");
     }
   };
 

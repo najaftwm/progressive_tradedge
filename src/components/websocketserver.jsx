@@ -24,6 +24,14 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
     );
   };
 
+  // ✅ Request permission for system notifications
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  // ✅ Fetch existing trades
   useEffect(() => {
     const fetchTrades = async () => {
       try {
@@ -64,12 +72,63 @@ const TradeNotifications = ({ onNewTradeTip, existingTradeTips = [], onUpdateTra
 
         setFetchedTrades(formattedTrades);
       } catch (error) {
-        console.error('❌ Failed to fetch trades:', error);
+        console.error('Failed to fetch trades:', error);
       }
     };
 
     fetchTrades();
   }, [authData]);
+
+  // ✅ Real-time updates with Pusher
+  useEffect(() => {
+    const pusher = new Pusher('YOUR_PUSHER_KEY', {
+      cluster: 'YOUR_PUSHER_CLUSTER',
+    });
+
+    const channel = pusher.subscribe('trade-channel');
+    channel.bind('new-trade', (data) => {
+      const newTrade = {
+        id: String(data.trade_id),
+        stockSymbol: data.stock_symbol,
+        stockName: data.stock_symbol,
+        entryPrice: Number(data.entry_price || 0),
+        targetPrice: Number(data.target_price || 0),
+        stopLoss: Number(data.stop_loss || 0),
+        timeFrame: data.time_frame || '1 Week',
+        analysis: data.description || '',
+        riskLevel: data.risk_level || 'Medium',
+        recommendedInvestment: Number(data.recommended_investment || 50000),
+        createdAt: data.created_at || Date.now(),
+        confidence: Number(data.confidence || 70),
+        potentialProfit: Number(data.potential_profit || 5),
+        potentialLoss: Number(data.potential_loss || 2),
+        type: data.trade_type,
+        supportNumber: data.support_number || '9876543210',
+      };
+
+      setFetchedTrades((prev) => [newTrade, ...prev]);
+      addLiveTrade(newTrade);
+
+      // ✅ Show system notification
+      if (Notification.permission === 'granted') {
+        new Notification(`New Trade Alert: ${newTrade.stockSymbol}`, {
+          body: `Entry: ₹${newTrade.entryPrice} | Target: ₹${newTrade.targetPrice} | SL: ₹${newTrade.stopLoss}`,
+          icon: '/trade-icon.png', // optional, add an icon in public folder
+        });
+      }
+
+      if (onNewTradeTip) onNewTradeTip(newTrade);
+    });
+
+    setIsConnected(true);
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
+      setIsConnected(false);
+    };
+  }, [addLiveTrade, onNewTradeTip]);
 
   const filteredTrades =
     filter === 'Today'

@@ -168,8 +168,8 @@ const Trades = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-between pt-10 mb-4">
+    <div className="min-h-screen bg-gray-100  pt-20 p-4">
+      <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-between  mb-4">
         <h2 className="text-lg font-bold text-gray-800">Trade Notifications</h2>
         <div className="flex items-center px-3 py-1.5 rounded-full bg-green-100">
           <span className="w-2.5 h-2.5 rounded-full mr-2 bg-green-600"></span>

@@ -6,7 +6,7 @@ import moment from 'moment';
 
 const PackagesScreen = () => {
   const navigate = useNavigate();
-  const { userTransactions } = useContext(AuthContext); // ✅ FIXED HERE
+  const { userTransactions } = useContext(AuthContext); //  FIXED HERE
   const [expanded, setExpanded] = useState(true);
 
   console.log('🧾 userTransactions:', JSON.stringify(userTransactions, null, 2));
@@ -79,7 +79,7 @@ const PackagesScreen = () => {
                   className="bg-white rounded-xl p-4 border border-gray-300 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors duration-200"
                   onClick={() => {
                     if (!item.package_id) {
-                      console.warn('❌ Invalid package_id');
+                      console.warn(' Invalid package_id');
                       return;
                     }
                     navigate({

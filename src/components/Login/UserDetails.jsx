@@ -67,12 +67,12 @@ const UserDetails = ({
         notifyUser(`Welcome to Tradedge! WhatsApp confirmation sent to ${phoneNumber}.`);
         return true;
       } else {
-        console.error('❌ WhatsApp error:', result);
+        console.error(' WhatsApp error:', result);
         notifyUser('Failed to send WhatsApp confirmation.');
         return false;
       }
     } catch (error) {
-      console.error('❌ WhatsApp Exception:', error);
+      console.error(' WhatsApp Exception:', error);
       notifyUser('Error sending WhatsApp confirmation.');
       return false;
     }

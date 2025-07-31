@@ -16,7 +16,6 @@ const BottomNav = () => {
     { label: "Stocks", path: "/stocks", icon: LineChart },
     { label: "Trades", path: "/trades", icon: Crown },
     { label: "Packs", path: "/packs", icon: Compass },
-    { label: "Refer", path: "/refer", icon: Headphones },
     { label: "Profile", path: "/profile", icon: User },
   ];
 
@@ -38,7 +37,7 @@ const BottomNav = () => {
             to={path}
             className={`flex flex-col items-center text-xs ${iconColor}`}
           >
-            <Icon className={`w-5 h-5 mb-1`} />
+            <Icon className={`w-6 h-6 mb-1`} />
             <span>{label}</span>
           </Link>
         );

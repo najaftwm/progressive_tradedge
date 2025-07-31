@@ -122,34 +122,41 @@ const Packs = () => {
 
   // === Main render ===
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-3">
-      {/* Header */}
+    <div className="min-h-screen bg-gray-100 pt-20 dark:bg-gray-900 p-3">
+      {/* Header 
       <div className="flex justify-between items-center p-2 mb-2">
         <h1 className="text-xl font-semibold text-gray-800 dark:text-white text-center flex-1">Packs</h1>
         <button className="bg-blue-500 text-white px-3 py-1 rounded ml-2">Buy Pro</button>
-      </div>
+      </div> */}
 
       {/* Tags bar */}
       {uniqueTags.length > 0 && (
-        <div className="bg-gray-50 dark:bg-gray-800 p-2 mb-3">
-          <div className="flex overflow-x-auto space-x-2 no-scrollbar">
-            {uniqueTags.map((tag, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => setSelectedTag(tag)}
-                className={`px-4 py-1 rounded-full border font-medium text-sm whitespace-nowrap transition flex-shrink-0 ${
-                  selectedTag === tag
-                    ? 'bg-blue-500 text-white border-blue-500'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-300'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
+      <div className="bg-gray-50 dark:bg-gray-800 p-2 mb-3">
+        <div className="flex overflow-x-auto space-x-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <style>
+            {`
+              .hide-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+            `}
+          </style>
+          {uniqueTags.map((tag, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setSelectedTag(tag)}
+              className={`px-4 py-1 rounded-full border font-medium text-sm whitespace-nowrap transition flex-shrink-0 ${
+                selectedTag === tag
+                  ? 'bg-blue-500 text-white border-blue-500'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-300'
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
         </div>
-      )}
+      </div>
+    )}
 
       {/* Package cards */}
       <div className="flex flex-col space-y-4 pb-20">
@@ -223,7 +230,7 @@ const Packs = () => {
               <div className="flex space-x-2 mt-3">
                 <AnimatedButton
                   title="Enquiry"
-                  icon={<Phone size={16} className="text-white mr-2" />}
+                  icon={<Phone size={16} className="text-black mr-2" />}
                   onPress={() => (window.location.href = 'tel:7400330785')}
                   variant="secondary"
                   className="flex-1 bg-black text-white p-2 rounded min-h-[44px]"

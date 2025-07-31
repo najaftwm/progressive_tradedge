@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, ChevronRight } from 'lucide-react';
+import { User, Mail, Phone, ChevronRight, CheckCircle, AlertCircle } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
+import KycComponent from '../components/Login/KycComponent';
 
 const Profile = () => {
-  const { authData, userDetails, userTransactions, userDetailsLoading, transactionsLoading, userDetailsError, transactionsError } = useContext(AuthContext);
+  const { authData, userDetails, userTransactions, userDetailsLoading, transactionsLoading, userDetailsError, transactionsError, kycStatus } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Calculate user stats from userTransactions
@@ -22,6 +23,9 @@ const Profile = () => {
     return { invested, trades };
   };
 
+  const isKycVerified = kycStatus === 'Y' || authData?.auth === 'Y';
+  const isKycNotVerified = kycStatus === 'N';
+  const isKycNotApplied = !isKycVerified && !isKycNotVerified; // Neither verified nor not verified (e.g., null, undefined, or other)
   const { invested, trades } = getUserStats();
 
   const ProfileItem = ({ icon: Icon, label, value }) => (
@@ -35,7 +39,6 @@ const Profile = () => {
           <p className="font-medium text-black">{value || 'Not provided'}</p>
         </div>
       </div>
-      <ChevronRight size={20} className="text-gray-400" />
     </div>
   );
 
@@ -80,6 +83,8 @@ const Profile = () => {
         </div>
       </div>
 
+      
+
       {/* Personal Info */}
       <div className="mt-6 bg-white shadow rounded-xl mx-4 p-4">
         <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
@@ -88,27 +93,47 @@ const Profile = () => {
         <ProfileItem icon={Phone} label="Phone" value={userDetails?.username || authData?.user_name || 'Not provided'} />
       </div>
 
-      {/* KYC Status */}
-      <div className="mt-6 bg-white shadow rounded-xl mx-4 p-4">
-        <h3 className="text-lg font-semibold   text-gray-600 mb-4">Account Status</h3>
-        {authData?.auth === 'Y' ? (
-          <p className="text-sm font-Large text-green-600">
-            KYC Status: <span className="font-bold text-green-700">Verified</span>
-          </p>
-        ) : authData?.auth === 'N' ? (
-          <p className="text-sm font-Large text-red-600">
-            KYC Status: <span className="font-bold text-red-700">Unverified</span> – Please contact support
-          </p>
-        ) : (
-          <p className="text-sm font-Large text-yellow-600">
-            KYC Status: <span className="font-bold text-yellow-700">Pending</span> – Verification in progress
-          </p>
+      {/* KYC Status Message */}
+      <div className="mt-6 mx-4 space-y-4">
+        {isKycVerified && (
+          <div className="bg-gradient-to-r from-green-600 to-green-500 text-white p-4 rounded-xl shadow-md flex items-center space-x-3">
+            <CheckCircle size={24} className="text-white" />
+            <div>
+              <p className="text-lg font-semibold">KYC Verified</p>
+              <p className="text-sm">Your identity has been successfully verified!</p>
+            </div>
+          </div>
+        )}
+        {isKycNotVerified && (
+          <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl shadow-md flex items-center space-x-3">
+            <AlertCircle size={24} className="text-red-600" />
+            <div>
+              <p className="text-lg font-semibold">KYC Not Verified</p>
+              <p className="text-sm">Your KYC submission was not approved. Please try again.</p>
+            </div>
+          </div>
+        )}
+        {isKycNotApplied && (
+          <div className="bg-gray-100 border border-gray-200 text-gray-600 p-4 rounded-xl shadow-md flex items-center space-x-3">
+            <AlertCircle size={24} className="text-gray-600" />
+            <div>
+              <p className="text-lg font-semibold">KYC Not Applied</p>
+              <p className="text-sm">Please complete your KYC to access all features.</p>
+            </div>
+          </div>
         )}
       </div>
 
+      {/* Render KYC component if KYC is NOT applied */}
+      {isKycNotApplied && (
+        <div className="mt-6 mx-4">
+          <KycComponent />
+        </div>
+      )}
+
       {/* Transaction History + Packages */}
       <div className="mt-6 bg-white shadow rounded-xl mx-4 p-4 space-y-4">
-        <h3 className="text-lg font-semibold mb-2">Transactions & Packages</h3>
+        <h3 className="text-lg font-semibold mb-2 text-black">Transactions & Packages</h3>
         <button
           onClick={() => navigate('/transactions-history')}
           className="w-full bg-green-500 hover:bg-green-600 text-center py-3 rounded-lg flex items-center justify-between px-4"

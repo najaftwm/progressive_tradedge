@@ -37,8 +37,8 @@ const ExplorePackageCard = ({ item }) => {
   }, []);
 
   const handleTradePress = () => {
-  navigate(`/Tradedetails?package_id=${item.package_id}`);
-};
+    navigate(`/Tradedetails?package_id=${item.package_id}`);
+  };
   // Constants for display (you can adapt these to your data)
   const title = item.title ?? 'Stock Option Basic';
   const icon = item.icon ?? '₹';
@@ -52,29 +52,27 @@ const ExplorePackageCard = ({ item }) => {
       onMouseUp={() => setPressed(false)}
       onMouseLeave={() => setPressed(false)}
       style={{ transform: `scale(${scaleRef.current})` }}
-      className="min-w-[180px] max-w-[350px] min-h-[230px] rounded-xl shadow-lg bg-black hover:shadow-xl border border-gray-800 cursor-pointer relative overflow-hidden transition-transform duration-100"
+      className="min-w-[220px] max-w-[400px] min-h-[220px] rounded-xl shadow-lg bg-black hover:shadow-xl border border-gray-800 cursor-pointer relative overflow-hidden transition-transform duration-100"
     >
       {/* Header */}
-      <div className="flex justify-between items-center px-4 pt-4 pb-2 border-b border-gray-800">
-        <span className="font-bold text-base text-white">{title}</span>
-        
+      <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b border-gray-800">
+        <span className="font-bold text-xl text-white">{title}</span>
       </div>
       
       {/* Feature list */}
-      <div className="px-4 py-3 flex flex-col gap-2">
-        <div className="flex items-center gap-2 text-white text-sm font-medium">
-          <Check size={18} className="text-lime-400" />
+      <div className="px-6 py-4 flex flex-col gap-3">
+        <div className="flex items-center gap-3 text-white text-base font-medium">
+          <Check size={20} className="text-lime-400" />
           Daily
         </div>
-        <div className="flex items-center gap-2 text-white text-sm font-medium">
-          <Check size={18} className="text-lime-400" />
+        <div className="flex items-center gap-3 text-white text-base font-medium">
+          <Check size={20} className="text-lime-400" />
           Profit margin 80%
         </div>
       </div>
 
       {/* Footer with price */}
-      <div className="border-t border-gray-800 px-4 py-4 bg-black/95 flex justify-between items-center relative">
-        {/* shimmer effect */}
+      <div className="border-t border-gray-800 px-6 py-3 bg-black/95 flex justify-between items-center relative">
         <div
           className="absolute top-0 left-0 w-2/3 h-full pointer-events-none"
           style={{
@@ -84,10 +82,12 @@ const ExplorePackageCard = ({ item }) => {
             filter: "blur(1.5px)",
           }}
         />
-        <span className="text-gray-400 text-sm line-through z-20">{`₹ ${Number(mrp).toLocaleString('en-IN')}`}</span>
-        <span className="bg-gradient-to-b from-lime-600 to-lime-400 rounded-md px-4 py-2 text-base font-bold text-white shadow z-20">
-          ₹ {Number(price).toLocaleString('en-IN')}/-
-        </span>
+        <div className="flex items-center gap-3 z-20">
+          <span className="text-gray-400 text-base line-through">₹{Number(mrp).toLocaleString('en-IN')}</span>
+          <span className="bg-gradient-to-b from-lime-600 to-lime-400 rounded-md px-4 py-2 text-base font-bold text-white shadow">
+            ₹{Number(price).toLocaleString('en-IN')}/-
+          </span>
+        </div>
       </div>
     </div>
   );

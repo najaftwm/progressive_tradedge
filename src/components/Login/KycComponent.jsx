@@ -17,9 +17,9 @@ const sendKycconfirmationmail = async (email, status) => {
     });
 
     const data = await res.json();
-    console.log("📬 Response from PHP:", data);
+    console.log(" Response from PHP:", data);
   } catch (err) {
-    console.error(`❌ Error sending KYC ${status} email:`, err.message || err);
+    console.error(` Error sending KYC ${status} email:`, err.message || err);
   }
 };
 
@@ -65,12 +65,12 @@ const KycComponent = ({ onKycComplete }) => {
         if (!email || emailSent) return;
 
         if (status === 'Y') {
-          console.log("✅ Sending verified KYC mail to:", email);
+          console.log(" Sending verified KYC mail to:", email);
           await sendKycconfirmationmail(email, 'verified');
           setEmailSent(true);
         }
       } catch (err) {
-        setMessage('❌ Failed to fetch KYC or send email');
+        setMessage(' Failed to fetch KYC or send email');
         console.error(err);
       }
     };
@@ -116,11 +116,11 @@ const KycComponent = ({ onKycComplete }) => {
   };
 
   if (kycStatus === 'Y') {
-    return <p className="p-4 bg-green-100 text-green-700 rounded">✅ Verified</p>;
+    return <p className="p-4 bg-green-100 text-green-700 rounded"> Verified</p>;
   }
 
   if (kycStatus === 'N' && (authData?.aadhar_name || authData?.pan_name)) {
-    return <p className="p-4 bg-red-100 text-red-700 rounded">❌ Unverified – contact support</p>;
+    return <p className="p-4 bg-red-100 text-red-700 rounded"> Unverified – contact support</p>;
   }
 
   return (
@@ -128,7 +128,7 @@ const KycComponent = ({ onKycComplete }) => {
       {!expanded ? (
         <div className="bg-white rounded-xl shadow p-4 border-2 border-green-500">
           <div className="flex items-start gap-2">
-            <div className="text-green-600 text-2xl">✅</div>
+            <div className="text-green-600 text-2xl"></div>
             <div>
               <p className="text-green-700 font-bold text-lg">KYC Required</p>
               <p className="text-sm text-gray-700">Verify your identity to unlock all features.</p>

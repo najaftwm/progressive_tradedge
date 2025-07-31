@@ -10,6 +10,7 @@ const latestOffers = [
 ];
 
 const OFFER_DURATION = 25 * 60; // 25 minutes in seconds
+const AUTO_SLIDE_INTERVAL = 5000; // 5 seconds
 
 export default function BuyPackageOffer() {
   const [searchParams] = useSearchParams();
@@ -26,11 +27,31 @@ export default function BuyPackageOffer() {
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
 
+  // Timer for offer countdown
   useEffect(() => {
     if (secondsLeft <= 0) return;
     const timer = setInterval(() => setSecondsLeft(s => s - 1), 1000);
     return () => clearInterval(timer);
   }, [secondsLeft]);
+
+  // ✅ Auto-slide effect
+  useEffect(() => {
+    const autoSlide = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % latestOffers.length);
+    }, AUTO_SLIDE_INTERVAL);
+
+    return () => clearInterval(autoSlide);
+  }, []);
+
+  // ✅ Smooth scroll whenever currentSlide changes
+  useEffect(() => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({
+        left: currentSlide * sliderRef.current.offsetWidth,
+        behavior: 'smooth',
+      });
+    }
+  }, [currentSlide]);
 
   const group1 = packages.filter((_, i) => i % 3 === 0);
   const group2 = packages.filter((_, i) => i % 3 === 1);
@@ -42,9 +63,11 @@ export default function BuyPackageOffer() {
   ];
 
   const handleSlide = (dir) => {
-    const next = dir === 'left' ? (currentSlide - 1 + latestOffers.length) % latestOffers.length : (currentSlide + 1) % latestOffers.length;
-    setCurrentSlide(next);
-    sliderRef.current?.scrollTo({ left: next * 1000, behavior: 'smooth' });
+    setCurrentSlide(prev =>
+      dir === 'left'
+        ? (prev - 1 + latestOffers.length) % latestOffers.length
+        : (prev + 1) % latestOffers.length
+    );
   };
 
   const handlePay = () => {
@@ -57,25 +80,51 @@ export default function BuyPackageOffer() {
     <div className="min-h-screen bg-gray-100 pb-36">
       {/* Header */}
       <div className="p-4">
-        <button onClick={() => navigate(-1)} className="text-orange-500 bg-orange-100 p-2 rounded-full">
+        <button onClick={() => navigate(-1)} className="text-orange-500 bg-orange-100 p-2 rounded-full hover:bg-orange-200 transition-colors">
           <MdArrowBack size={24} />
         </button>
       </div>
 
       {/* Offers Slider */}
-      <div className="flex items-center justify-center px-4">
-        <button onClick={() => handleSlide('left')}><MdChevronLeft size={28} /></button>
-        <div className="overflow-hidden w-full max-w-xl" ref={sliderRef}>
-          <div className="flex transition-all duration-300" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-            {latestOffers.map((item) => (
-              <div key={item.id} className="min-w-full bg-orange-50 p-6 rounded-xl shadow-md mx-2">
-                <h2 className="text-orange-600 text-lg font-bold">{item.title}</h2>
-                <p className="text-gray-700 mt-2">{item.desc}</p>
-              </div>
-            ))}
+      <div className="flex flex-col items-center justify-center px-8 py-6 relative">
+        <div className="relative w-full max-w-xl">
+          <button 
+            onClick={() => handleSlide('left')} 
+            className="absolute left-[-40px] top-1/2 transform -translate-y-1/2 z-10 bg-white p-3 rounded-full shadow-lg hover:bg-orange-100 transition-colors"
+          >
+            <MdChevronLeft size={28} className="text-orange-500" />
+          </button>
+          <div className="overflow-hidden w-full" ref={sliderRef}>
+            <div className="flex">
+              {latestOffers.map((item) => (
+                <div 
+                  key={item.id} 
+                  className="min-w-full bg-gradient-to-r from-orange-100 to-yellow-100 p-6 rounded-2xl shadow-xl mx-2 transform hover:scale-105 transition-transform duration-300"
+                >
+                  <h2 className="text-orange-600 text-xl font-extrabold tracking-tight">{item.title}</h2>
+                  <p className="text-gray-700 mt-3 text-base font-medium">{item.desc}</p>
+                  <button className="mt-4 text-orange-500 font-semibold underline hover:text-orange-600 transition-colors">
+                    Learn More
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
+          <button 
+            onClick={() => handleSlide('right')} 
+            className="absolute right-[-40px] top-1/2 transform -translate-y-1/2 z-10 bg-white p-3 rounded-full shadow-lg hover:bg-orange-100 transition-colors"
+          >
+            <MdChevronRight size={28} className="text-orange-500" />
+          </button>
         </div>
-        <button onClick={() => handleSlide('right')}><MdChevronRight size={28} /></button>
+        <div className="flex justify-center mt-4 gap-2">
+          {latestOffers.map((_, index) => (
+            <div 
+              key={index} 
+              className={`w-3 h-3 rounded-full ${index === currentSlide ? 'bg-orange-500' : 'bg-gray-300'} transition-colors`} 
+            />
+          ))}
+        </div>
       </div>
 
       {/* Offer Banner */}
@@ -108,7 +157,7 @@ export default function BuyPackageOffer() {
                     className={`min-w-[180px] border-2 rounded-xl p-4 flex-shrink-0 cursor-pointer ${selectedPackage?.package_id === pack.package_id ? 'border-orange-500 bg-orange-50' : 'border-gray-200 bg-white'}`}
                   >
                     <h3 className="text-orange-500 font-bold">{pack.title}</h3>
-                    <p className="text-lg font-bold text-gray-600  mt-2">₹{pack.price}</p>
+                    <p className="text-lg font-bold text-gray-600 mt-2">₹{pack.price}</p>
                     <p className="text-sm mt-1 text-gray-600">{pack.details?.[0]}</p>
                   </div>
                 ))}
@@ -135,7 +184,7 @@ export default function BuyPackageOffer() {
       </div>
 
       {/* Sticky Pay Button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white p-4 border-t border-gray-200">
+      <div className="fixed bottom-0 left-0 right-0 bg-white p-4 border-t pb-6 border-gray-200">
         <button
           disabled={!selectedPackage}
           onClick={handlePay}
